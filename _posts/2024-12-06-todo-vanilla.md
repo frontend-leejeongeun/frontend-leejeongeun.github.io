@@ -411,14 +411,13 @@ button {
   text-align: center;
   color: #ccc;
 }
-
-
 ```
 {: file='style.css'}
 
 ## 할 일 추가하기
- 1. 사용자 입력에 대한 이벤트 리스sj 등록하기
-    일단 할 일을 추가하기 위해서는 <input>요소로부터 이벤트 리스너를 등록하여 이벤트를 캐치 후 입력받은 데이터를 배열에 순차적으로 담아주고 <input>은 초기화합니다.
+ 1. 사용자 입력에 대한 이벤트 리스너 등록하기
+   - 일단 할 일을 추가하기 위해서는 input 요소로부터 이벤트 리스너를 등록하여 이벤트를 캐치 후 입력받은 데이터를 배열에 순차적으로 담아주고 input은 초기화합니다.
+
 ```js
 const todoInputEl = document.querySelector('.todo-input');
 
@@ -436,6 +435,7 @@ const init = () => {
 init()
 ```
 {: file='todo.js'}
+
 todo.js 파일을 만들어 줍니다. 그리고 input요소를 가져오기 위해 querySelector를 사용하여 todoInputEl에 담아두었습니다. todos는 할 일들을 담을 배열입니다. id는 각각의 할 일들이 유니크하게 구별할 수 있는 키값을 설정하기 위해 선언하였습니다.  init()함수는 todos.js파일이 실행되자마자 호출되는 함수입니다.
 init() 함수는 input요소를 담은 todoInputElem에 'keypress'에 대한 이벤트 리스너를 등록시킵니다. 만약 입력되는 값이 'Enter'라면 appendTodos() 함수에 e.target.value(input의 value)를 넘겨주고, todoInputElem의 value 값을 초기화합니다.
 
