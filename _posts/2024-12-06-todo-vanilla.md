@@ -52,7 +52,7 @@ render_with_liquid: false
 
 ## HTML과 CSS 적용하기
 먼저 [reset.css](https://meyerweb.com/eric/tools/css/reset/)를 적용해 주었습니다.
-reset.css는 브라우저 간의 스타일 불일치를 해소하는 크로스브라우징 작업을 목적으로 기본적으로 설정되어있는 브라우저 스타일 설정이 개발하는데 불편을 주기 떄문에 reset.css를 통해 이미 설정되어 있는 스타일을 적용하여 리셋 후 개발하였습니다. 
+reset.css는 브라우저 간의 스타일 불일치를 해소하는 크로스브라우징을 목적으로 사용하는데 이는 기본적으로 설정되어있는 브라우저 스타일 설정이 개발하는데 불편을 주기 때문입니다. reset.css를 통해 이미 설정되어 있는 스타일을 적용하여 리셋 후 개발하였습니다. 
 
 HTML과 CSS는 다음과 같이 적용하였습니다.
 
@@ -415,3 +415,29 @@ button {
 
 ```
 {: file='style.css'}
+
+## 할 일 추가하기
+ 1. 사용자 입력에 대한 이벤트 리스sj 등록하기
+    일단 할 일을 추가하기 위해서는 <input>요소로부터 이벤트 리스너를 등록하여 이벤트를 캐치 후 입력받은 데이터를 배열에 순차적으로 담아주고 <input>은 초기화합니다.
+```js
+const todoInputEl = document.querySelector('.todo-input');
+
+let todos = [];
+let id = 0;
+
+const init = () => {
+    todoInputEl.addEventListener('keypress', (e) =>{
+        if( e.key === 'Enter' ){
+            appendTodos(e.target.value); 
+            todoInputEl.value ='';
+        }
+    })
+}
+init()
+```
+{: file='todo.js'}
+todo.js 파일을 만들어 줍니다. 그리고 input요소를 가져오기 위해 querySelector를 사용하여 todoInputEl에 담아두었습니다. todos는 할 일들을 담을 배열입니다. id는 각각의 할 일들이 유니크하게 구별할 수 있는 키값을 설정하기 위해 선언하였습니다.  init()함수는 todos.js파일이 실행되자마자 호출되는 함수입니다.
+init() 함수는 input요소를 담은 todoInputElem에 'keypress'에 대한 이벤트 리스너를 등록시킵니다. 만약 입력되는 값이 'Enter'라면 appendTodos() 함수에 e.target.value(input의 value)를 넘겨주고, todoInputElem의 value 값을 초기화합니다.
+
+ 2. 할 일 추가하기
+ 3. HTML에 추가된 할 일 그려주기
