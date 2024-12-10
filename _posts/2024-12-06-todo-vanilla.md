@@ -1,7 +1,7 @@
 ---
 title: To Do - Vanilla Javascript
 author: jeongeun
-date: 2024-12 ~
+date: 2024-12-06 ~
 categories: [vanilla javascript, html, css]
 tags: [todo-list, vanilla javascript, html, css]
 render_with_liquid: false
@@ -443,10 +443,10 @@ init() 함수는 input요소를 담은 todoInputEl에 'keypress'에 대한 이�
    - todos 배열에 할 일을 추가하는 appendTodos()함수를 만들었습니다. 할 일은 다음과 같은 타입을 가집니다.
 
 | Company        | Type        |
-| :------------- | :---------- | 
-| id             | number      | 할 일의 고유한 키 값
-| isCompleted    | boolean     | 할 일의 완료 상태 
-| content        | string      | 할 일의 내용 
+| :------------- | ----------: | 
+| id             | number      | 
+| isCompleted    | boolean     | 
+| content        | string      |
 
 ```js
 let todos = []
