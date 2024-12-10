@@ -436,8 +436,82 @@ init()
 ```
 {: file='todo.js'}
 
-todo.js 파일을 만들어 줍니다. 그리고 input요소를 가져오기 위해 querySelector를 사용하여 todoInputEl에 담아두었습니다. todos는 할 일들을 담을 배열입니다. id는 각각의 할 일들이 유니크하게 구별할 수 있는 키값을 설정하기 위해 선언하였습니다.  init()함수는 todos.js파일이 실행되자마자 호출되는 함수입니다.
-init() 함수는 input요소를 담은 todoInputElem에 'keypress'에 대한 이벤트 리스너를 등록시킵니다. 만약 입력되는 값이 'Enter'라면 appendTodos() 함수에 e.target.value(input의 value)를 넘겨주고, todoInputElem의 value 값을 초기화합니다.
+todo.js 파일을 만들어 줍니다. 그리고 input요소를 가져오기 위해 querySelector를 사용하여 todoInputEl에 담아두었습니다. todos는 할 일들을 담을 배열입니다. id는 각각의 할 일들을 고유하게 구별할 수 있는 키값을 설정하기 위해 선언하였습니다.  init()함수는 todos.js파일이 실행되자마자 호출되는 함수입니다.
+init() 함수는 input요소를 담은 todoInputEl에 'keypress'에 대한 이벤트 리스너를 등록시킵니다. 만약 입력되는 값이 'Enter'라면 appendTodos() 함수에 e.target.value(input의 value)를 넘겨주고, todoInputEl의 value 값을 초기화합니다.
 
  2. 할 일 추가하기
+   - todos 배열에 할 일을 추가하는 appendTodos()함수를 만들었습니다. 할 일은 다음과 같은 타입을 가집니다.
+| Company        | Type        | Description            |
+| :------------- | :---------- | ---------------------: |
+| id             | number      | 할 일의 고유한 키 값    |
+| isCompleted    | boolean     | 할 일의 완료 상태       |
+| content        | string      | 할 일의 내용            |
+
+```js
+let todos = []
+let id= 0;
+
+const setTodos = (newTodos) => {
+  todos = newTodos;
+}
+
+const getAllTodos = () => {
+  return todos;
+}
+
+const appendTodos = (text) => {
+  const newId = id++;
+  const newTodos = getAllTodos().concat({id:newId, isCompleted:false, content:text})
+  // 스프레드 연산자 사용할 경우
+  // const newTodos = [...getAllTodos(), {id:newId, isCompleted:false, content:text}]
+  setTodos(newTodos)
+  paintTodos();
+}
+```
+{: file='todo.js'}
+
+newId 변수는 새롭게 저장되는 할 일의 id값이며, ++연상자를 통해 1씩 증가시킴으로써 id값이 중복되지 않도록 해줍니다. newTodos는 새롭게 저장될 todos 배열로 getAlltodos()함수를 통해 이전 todos 배열을 가져온 후, 새롭게 추가된 할 일을 concat()을 통해 newTodo에 저장합니다. concat()을 사용하는 이유는 concat()은 기존 todos배열에 아무런 영향을 주지 않고 todos배열을 복사한 값에 추가한 할일을 더해 반환해주기 때문입니다. 이렇게 반환 된 newTodos를 setTodos()라는 함수로 기존 todos 배열을 변경시켜줍니다.
+
+concat()말고 다른 방법으로는 스트레드 연산자를 사용해서 위 소스 중 주석과 같이 선언할 수 있습니다.
+
  3. HTML에 추가된 할 일 그려주기
+   - 할일이 추가될 때마다 paintTodos()함수를 실행하여 렌더링 하도록 할텐데 이 함수를 살펴봅니다. 
+
+```js
+const todoListEl =  document.querySelector('.todo-list');
+
+const paintTodos = () => {
+  todoListEl.innerHTML = ''; // todoListEl 요소 안의 HTML 초기화
+  const allTodos = getAllTodos() //todos 배열 가져오기
+
+  //"todo-item"에 해당하는 HTML을 그려서 "todo-list"에 추가하기
+  allTodos.forEach(todo => { 
+    const todoItemEl = document.createElement('li');
+    todoItemEl.classList.add('todo-item');
+    
+    // todoItemElem.setAttribute('data-id', todo.id );
+    const checkboxEl = document.createElement('div');
+    checkboxEl.classList.add('checkbox');
+
+    const todoEl = document.createElement('div');
+    todoEl.classList.add('todo');
+    todoEl.innerText = todo.content;
+
+    const delBtnEl = document.createElement('button');
+    delBtnEl.classList.add('delBtn');
+    delBtnEl.innerHTML = 'X';
+
+    if(todo.isCompleted) {
+      todoItemEl.classList.add('checked');
+      checkboxEl.innerText = '✔';
+    }
+
+    todoItemEl.appendChild(checkboxEl);
+    todoItemEl.appendChild(todoEl);
+    todoItemEl.appendChild(delBtnEl);
+
+    todoListEl.appendChild(todoItemEl);
+  })
+}
+```
+{: file='todo.js'}
