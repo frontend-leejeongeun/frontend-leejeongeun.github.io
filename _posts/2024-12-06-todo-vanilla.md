@@ -9,6 +9,7 @@ render_with_liquid: false
 
 바닐라 자바스크립트를 이용해 todo-list를 만들어 보았습니다.
 투두리스트의 동작방식은 [TodoMVC](https://todomvc.com/examples/javascript-es6/dist/)와 같이 동작하도록 개발하였으며, 다음과 같은 형태입니다.
+전체 소스코드는 [TodoVanilla-github-jeongeun](https://github.com/frontend-leejeongeun/todo-vanilla) 여기서 볼 수 있습니다.
 
    ![Desktop View](../assets/img/todo1.png){: width="700" height="400" }
 
@@ -581,4 +582,114 @@ const completeTodo = (todoId) => {
 ```
 {: file='todo.js'}
 
-체크박스를 ckick하면 checkTodo() 함수가 실행되며, 동작 방식은 삭제 기능과 거의 같습니다. 차이점은 삭제에서는 Array filter()를 사용해서 삭제하고자 하는 할 일을 제외한 배열을 만들었으면, 완료 처리는 Array map()을 사용하여 완료 처리를 하고자 하는 할 일의 isCompleted 값을 토글(true이면 false로, false면 true로) 처리하여 새로운 todos 배열을 저장합니다. 이후 HTML은 paintTodos() 함수를 통해 변경된 todos를 재 렌더링합니다.
+체크박스를 ckick하면 completeTodo() 함수가 실행되며, 동작 방식은 삭제 기능과 거의 같습니다. 차이점은 삭제에서는 Array filter()를 사용해서 삭제하고자 하는 할 일을 제외한 배열을 만들었으면, 완료 처리는 Array map()을 사용하여 완료 처리를 하고자 하는 할 일의 isCompleted 값을 토글(true이면 false로, false면 true로) 처리하여 새로운 todos 배열을 저장합니다. 이후 HTML은 paintTodos() 함수를 통해 변경된 todos를 재 렌더링합니다.
+
+## 할 일 수정하기
+ 1. 더블 클릭 시 수정 모드 전환
+   - 기능 정의에 2번 input창을 더블 클릭하면 수정 모드로 전환하는 기능을 추가합니다.
+   이전에 만들었던 paintTdos()함수에 todoEl이 만들어질 때 더블 클릭에 대한 이벤트 리스너를 등록합니다. 그리고 todoEl 요소에 더블 클릭 이벤트가 발생하면 콜백 함수로 onDbclickTodo() 함수가 호출됩니다.
+
+```js
+const paintTodos = () => {
+  todoListEl.innerHTML = ''; // todoListEl 요소 안의 HTML 초기화
+  const allTodos = getAllTodos() //todos 배열 가져오기
+
+  //"todo-item"에 해당하는 HTML을 그려서 "todo-list"에 추가하기
+  allTodos.forEach(todo => { 
+    ...생략
+    
+    const todoEl = document.createElement('div');
+    todoEl.classList.add('todo');
+    todoEl.addEventListener('dblclick', (event) => onDbclickTodo(event, todo.id)) // 더블 클릭에 대한 이벤트 핸들러
+    todoEl.innetText = todo,content;
+
+    ...생략
+  })
+}
+```
+{: file='todo.js'}
+
+onDbclickTodo() 함수는 두 개의 파라미터를 받습니다. 첫번째 파라미터는 event객체이며, 두번째 파라미터는 할 일의 id입니다. onDbclickTodo() 함수를 통해 새로은 input요소를 만들어 사용자가 수정할 수 있도록 하겠습니다.
+
+```js
+const onDbclickTodo = (e, todoId) => {
+  const todoEl = e.target;
+  const inputText = e.target.innerText;
+  const todoItemEl = todoEl.parentNode;
+  const inputEl = document.createElement('input');
+
+  inputEl.value = inputText;
+  inputEl.classList.add('edit-input');
+
+  inputEl.addEventListener('keypress', (e) => {
+    if(e.key === 'Enter'){
+      updateTodo(e.target.value, todoId); // todo 수정
+    }
+  })
+}
+```
+{: file='todo.js'}
+
+```css
+.edit-input {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 590px;
+    height: 2.8rem;
+    margin: 0;
+}
+```
+{: file='style.css'}
+
+document.createElement() 함수를 통해 inputEl이라는 input요소를 만들고 inputEl의 value값으로 event객체의 innerText를 넣어줍니다. inputElem의 클래스 네임으로는 'edit-input'이라고 지정합니다. 'edit-input' 클래스 네임을 가지는 요소를 position: absolute로 정의하여 수정하고자 하는 todoItemElem영역을 position을 활용해 완전히 가리도록 스타일링하였습니다.
+
+ 2. 수정하기
+   - 수정을 위해 만들어준 input요소에서 'Enter'키가 눌리면, 기존의 할 일 내용을 updateTodo() 함수를 통해 수정합니다. updateTodo()는 두개의 파라미터를 받습니다. 첫쨰는 text로 수정될 할 일의 내용이며, 두번쨰는 todoId로 수정 될 할 일의 id입니다.  
+
+```js
+const updateTodo = (text, todoId) => {
+  const newTodos = getAllTodos().map((todo) => todo.id === todoId ? ({...todo, content:text}) : todo);
+  setTodos(newTodos);
+  paintTodos();
+}
+```
+{: file='todo.js'}
+
+getAllTodos()함수로 todos배열을 가져와 map을 통해 id값을 비교하여 할 일의 내용을 수정하는 새로운 todos배열을 만듭니다. 그리고 setTodos()함수를 통해 새로운 todos배열을 저장한 후 paintTodos() 함수를 통해 변경 된 todos배열로 할 일 리스트를 다시 렌더링 합니다. paintTodos() 함수에는 UI 초기화 코드가 있기때문에 이 때문에 새롭게 초기화 후 그려질 수 있어 원하는 UI를 볼 수 있습니다.
+
+ 2. 수정 모드 종료
+   - 수정을 위한 입력창을 제외하고, 브라우저에서 클릭 이벤트가 발생 시, 수정 모드를 종료하도록 기능을 구현하겠습니다.
+
+```js
+const onDbclickTodo = (e, todoId) => {
+  const todoEl = e.target;
+  const inputText = e.target.innerText;
+  const todoItemEl = todoEl.parentNode;
+  const inputEl = document.createElement('input');
+
+  inputEl.value = inputText;
+  inputEl.classList.add('edit-input');
+
+  inputEl.addEventListener('keypress', (e) => {
+    if(e.key === 'Enter'){
+      updateTodo(e.target.value, todoId); // todo 수정
+      document.body.removeEventListener('click', onClickBody ); // 엔터키를 눌러 업데이트를 완료했을 경우도 이벤트리스너 제거
+    }
+  })
+
+  todoItemEl.appendChild(inputEl); // todoItemElem 요소에 자식 요소로 inputElem 요소 추가
+
+  // body에 클릭에 대한 이벤트 리스너 등록
+  document.body.EventListener('click', onClickBody);
+
+  // todoItemElem 요소를 제외한 영역을 클릭 시, 수정모드 종료
+  const onClickBody = (e) => {
+    if(e.target !== inputEl){
+      todoItemEl.removeChild(inputElem);
+      document.body.removeEventListener('click', onClickBody );
+    }
+  }
+}
+```
+{: file='todo.js'}
