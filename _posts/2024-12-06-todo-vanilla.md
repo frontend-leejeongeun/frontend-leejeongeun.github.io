@@ -11,10 +11,10 @@ render_with_liquid: false
 투두리스트의 동작방식은 [TodoMVC](https://todomvc.com/examples/javascript-es6/dist/)와 같이 동작하도록 개발하였으며, 다음과 같은 형태입니다.
 전체 소스코드는 [TodoVanilla-github-jeongeun](https://github.com/frontend-leejeongeun/todo-vanilla) 여기서 볼 수 있습니다.
 
-   ![Desktop View](../assets/img/todo1.png){: width="700" height="400" }
+  ![Desktop View](../assets/img/todo1.png){: width="700" height="400" }
 
 ## 기능 정의하기
- ![Desktop View](../assets/img/todo2.png){: width="700" height="400" }
+  ![Desktop View](../assets/img/todo2.png){: width="700" height="400" }
  
  1. 전체 선택
    - Section전체 완료되지 않음 상태 일 때는 회색으로 표시
@@ -693,3 +693,122 @@ const onDbclickTodo = (e, todoId) => {
 }
 ```
 {: file='todo.js'}
+
+## 전체 완료 처리 및 남은 할 일 개수
+  ![Desktop View](../assets/img/todo3.png){: width="700" height="400" }
+
+ 1. todos 전체 완료 처리
+   - 우선 todos.js 상단에 전체 완료 처리를 위해 만들어 둔 버튼을 querySelector를 통해 checkAllBtnElem이라 선언하겠습니다. 그 다음, init() 함수 안에서 해당 버튼에 대한 클릭 이벤트 리스너를 등록하고, 콜백 함수로 onClickCompleteAll() 이라는 함수를 호출하겠습니다.
+
+```js
+const completeAllBtnEl = document.querySelector('.complete-all-btn');
+
+const init = () => {
+  todoInputEl.addEventListener('keypress', (e) =>{
+    if( e.key === 'Enter' ){
+        appendTodos(e.target.value); 
+        todoInputEl.value ='';
+    }
+  })
+  
+  completeAllBtnEl.addEventListener('click', onClickCompleteAll) // 전체 완료 처리 버튼에 클릭 이벤트 리스너 
+}
+init()
+```
+{: file='todo.js'}
+
+onClickCompleteAll() 함수는 현재 todos의 완료 상태 여부를 파악하여, 전체 완료를 처리하며, 동작 방식은 다음과 같습니다.
+
+```js
+let isAllCompleted = false; // 전체 todos 체크 여부
+
+const setIsAllCompleted = (boolean) => {
+  isAllCompleted = boolean;
+}
+
+const completeAll = () => {
+  completeAllBtnEl.classList.add('checked');
+  const newTodos = getAllTodos().map(todo => ({...todo, isCompleted: true}));
+  setTodos(newTodos)
+}
+
+const incompleteAll = () => {
+    completeAllBtnEl.classList.remove('checked');
+    const newTodos =  getAllTodos().map(todo => ({...todo, isCompleted: false }) );
+    setTodos(newTodos)
+}
+
+const getCompletedTodos = () => {
+    return todos.filter(todo => todo.isCompleted === true );
+}
+
+// 전체 todos의 isCompleted 상태를 체크하여, 처리
+const checkIsAllCompleted = () => {
+  if(getAllTodos().length === getCompletedTodos().length){
+    setIsAllCompleted(true)
+    completeAllBtnEl.classList.add('checked');
+  } else {
+    setIsAllCompleted(false);
+    completeAllBtnElem.classList.remove('checked');
+  }
+}
+
+const onClickCompleteAll = () => {
+  if(!getAllTodos().length) return; // todos배열의 길이가 0이면 return;
+
+  if(isAllCompleted) {
+    incompleteAll(); // isAllCompleted가 true이면 todos를 전체 미완료 처리 
+  } else {
+    completeAll(); // isAllCompleted가 false이면 todos를 전체 완료 처리 
+    setIsAllCompleted(!isAllCompleted); // isAllCompleted 토글
+    paintTodos(); // 새로운 todos를 렌더링
+    setLeftItems()
+  }
+}
+```
+{: file='todo.js'}
+
+onClickCompleteAll() 함수를 통해 isAllCompleted 상태를 토글 시켜주며, 기존의 todos를 배열의 isCompleted를 바뀌는 isAllChecked 상태에 맞춰서 바꿔줍니다. isAllCheked값이 false가 되면, 전체 todos배열의 isCompleted값을 false로 바꿔주며, isAllChecked값이 true가 되면, 전체 todos배열의 isCompleted값을 true로 바꿔줍니다. 그 후, paintTodos()함수를 통해 todos를 재 렌더링해줍니다.
+
+이때 completeAllBtnElem 요소는 클릭 될 때만 isAllCompleted상태 값이 변하는 것이 아니라, 각각의 할 일 들을 완료 처리 할때와 새로운 할 일이 추가 될때도  isAllCompleted의 상태가 변하고, HTML에 표시해주어야 합니다. 
+
+이를 위해 checkIsAllCompleted()라는 함수를 만들어 줍니다. checkIsAllCompleted()함수는 현재 todos배열의 길이와, 완료된 todos배열의 길이를 비교한 후, isAllCompleted의 상태를 변경하고 completeAllBtnElem요소에 'checked' 클래스 네임을 추가 또는 삭제합니다.
+
+새롭게 만든 checkIsAllCompleted()함수를 completeTodo()함수와 appendTodos()함수에 추가해주면, 각각의 할 일이 완료 처리가 될 때와, 새로운 할 일이 추가 될때마다 전체 할 일의 완료 여부를 파악하여 이를 표현해 줄 수 있습니다.
+
+```js
+const completeTodo = (todoId) => {
+  const newTodos = getAllTodos().map(todo => todo.id === todoId ? {...todo,  isCompleted: !todo.isCompleted} : todo )
+  setTodos(newTodos);
+  paintTodos();
+  checkIsAllCompleted(); // 전체 todos의 완료 상태를 파악하여 전체 완료 처리 버튼 CSS 반영
+}
+
+const appendTodos = (text) => {
+  ...생략
+  checkIsAllCompleted(); // 전체 완료처리 확인
+  paintTodos();
+}
+```
+{: file='todo.js'}
+
+ 2. 남은 할 일 개수 표시하기
+   - 남은 할 일 개수를 표시하는 요소를 querySelector를 사용하여 가져와 leftItemsEl이라 선언하겠습니다. 그리고 setLeftItems()라는 함수를 만들어 완료 처리가 되는 부분 마다 적용하여, 남은 할 일 개수를 갱신해주도록 하겠습니다.
+
+```js
+const leftItemsEl = document.querySelector('.left-items');
+
+// 현재 완료되지 않은 할 일 리스트를 반환한다.
+const getActiveTodos = () => {
+  return todos.filter(todo => todo.isCompleted === false);
+}
+
+const setLeftItems = () => {
+  const leftTodos = getActiveTodos();
+  leftItemsEl.innerHTML = `남은 할 일 ${leftTodos.length}`
+
+}
+```
+{: file='todo.js'}
+
+남은 할 일 개수를 표현하는 setLeftItems()함수는 todos의 배열의 길이와 완료상태가 변할 때 호출되는 함수[ init(), appendTodos(), deleteTodo(), completeTodo(), onClickCompleteAll() ]에 각각 적용해 주도록 합니다. 
