@@ -943,3 +943,5 @@ const clearCompletedTodos = () => {
 }
 ```
 {: file='todo.js'}
+
+전체 소스코드는 [TodoVanilla-github-jeongeun](https://github.com/frontend-leejeongeun/todo-vanilla) 여기서 볼 수 있습니다.
