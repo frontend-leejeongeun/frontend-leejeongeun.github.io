@@ -812,3 +812,134 @@ const setLeftItems = () => {
 {: file='todo.js'}
 
 남은 할 일 개수를 표현하는 setLeftItems()함수는 todos의 배열의 길이와 완료상태가 변할 때 호출되는 함수[ init(), appendTodos(), deleteTodo(), completeTodo(), onClickCompleteAll() ]에 각각 적용해 주도록 합니다. 
+
+## 하단 필터링 버튼 기능 구현
+투두리스트 하단의 All, Active, Completed, Completed Clear 버튼의 기능을 구현하겠습니다. 각각의 버튼 역할을 다음과 같습니다.
+
+| filter         | Description                                      |
+| :------------- | :----------------------------------------------- | 
+| All            | 전체 투두리스트를 보여준다                         | 
+| Active         | 완료되지 않은 할 일 리스트를 보여준다               | 
+| Completed      | 완료된 할 일 리스트를 보여준다                     |
+| Completed Clear| 완료된 할 일 리스트를 전체 투두리스트에서 삭제한다   |
+
+ 1. 각각의 버튼에 이벤트 리스너 등록하기
+   - 우선 todos.js 파일 상단에 All, Active, Completed, Completed Clear 버튼 요소를 querySelector로 가져옵니다. 그리고 init()함수 안에서 각각의 버튼에 'click'에 대한 이벤트 리스너를 등록해줍니다. All, Active, Completed 버튼에는 onClickShowTodosType()함수를 콜백으로 호출하며, Completed Clear 버튼에는 clearCompletedTodos()함수를 콜백으로 호출합니다.
+
+```js
+const showAllBtnElem = document.querySelector('.show-all-btn');	// All 버튼 
+const showActiveBtnElem = document.querySelector('.show-active-btn'); // Active 버튼
+const showCompletedBtnElem = document.querySelector('.show-completed-btn'); // Completed 버튼
+const clearCompletedBtnElem = document.querySelector('.clear-completed-btn'); // Completed Clear 버튼
+
+const init = () => {
+  ...생략 
+
+  showAllBtnElem.addEventListener('click', onClickShowTodosType);
+  showActiveBtnElem.addEventListener('click', onClickShowTodosType);
+  showCompletedBtnElem.addEventListener('click', onClickShowTodosType);
+  clearCompletedBtnElem.addEventListener('click', clearCompletedTodos);
+
+  checkAllBtnElem.addEventListener('click',  onClickCheckAll)
+  setLeftItems();
+}
+
+let currentShowType = 'all'; // all  | active | complete
+const setCurrentShowType = (newShowType) => currentShowType = newShowType
+
+const onClickShowTodosType = (e) => {
+  const currentBtnEl = e.target;
+  const newShowType = currentBtnEl.dataset.type;
+
+  if ( currentShowType === newShowType ) return;
+
+  const preBtnEl = document.querySelector(`.show-${currentShowType}-btn`);
+  preBtnEl.classList.remove('selected');
+
+  currentBtnEl.classList.add('selected')
+  setCurrentShowType(newShowType)
+  
+  paintTodos();
+}
+```
+{: file='todo.js'}
+
+onClickShowTodosType()는 현재 클릭된 버튼 요소인 currentBtnElem의 dataset을 사용해 type을 가져옵니다. 저희는 이전의 HTML을 작성할 때, 각각의 버튼에 data-type으로 showType을 다음과 같이 지정 해주었습니다.
+
+```html
+<div class="button-group">
+  <button class="show-all-btn selected" data-type="all">All</button>
+  <button class="show-active-btn" data-type="active">Active</button>
+  <button class="show-completed-btn" data-type="completed">Completed</button>
+</div>
+```
+{: file='index.html'}
+
+이를 이전의 showType 버튼에 'selected' 클래스 네임을 제거해주고, 새로운 showType 버튼에 'selected' 클래스 네임을 추가 해줍니다. 그리고 setCurrentShowType()함수를 사용하여, currentShowType을 변경해 줍니다. 그 다음, paintTodos()함수를 사용하여 재 렌더링 해주면 됩니다. 하지만, 기존의 paintTodos()함수는 현재 currentShowType에 따라 렌더링하지 않고, 전체 투두리스트를 렌더링합니다. 따라서, 기존 paitTodos()함수를 다음과 같은 형태로 switch-case문을 사용하여 currentShowType에 따라 렌더링 할 수 있도록 변경해주었으며, 실질적으로 각각의 할 일이 렌더링 되는 함수는 paintTodo()함수로 분리해 주었습니다.
+
+```js
+const paintTodos = () => {
+  todoListElem.innerHTML = '';
+
+  switch (currentShowType) {
+    case 'all':
+      const allTodos = getAllTodos();
+      allTodos.forEach(todo => { paintTodo(todo);});
+      break;
+    case 'active': 
+      const activeTodos = getActiveTodos();
+      activeTodos.forEach(todo => { paintTodo(todo);});
+      break;
+    case 'completed': 
+      const completedTodos = getCompletedTodos();
+      completedTodos.forEach(todo => { paintTodo(todo);});
+      break;
+    default:
+      break;
+  }
+}
+
+const paintTodo = (todo) => {
+  const todoItemEl = document.createElement('li');
+  todoItemEl.classList.add('todo-item');
+
+  todoItemEl.setAttribute('data-id', todo.id );
+
+  const checkboxEl = document.createElement('div');
+  checkboxEl.classList.add('checkbox');
+  checkboxEl.addEventListener('click', () => completeTodo(todo.id))
+
+  const todoEl = document.createElement('div');
+  todoEl.classList.add('todo');
+  todoEl.addEventListener('dblclick', (event) => onDbclickTodo(event, todo.id))
+  todoEl.innerText = todo.content;
+
+  const delBtnEl = document.createElement('button');
+  delBtnEl.classList.add('delBtn');
+  delBtnEl.addEventListener('click', () =>  deleteTodo(todo.id))
+  delBtnEl.innerHTML = 'X';
+
+  if(todo.isCompleted) {
+    todoItemEl.classList.add('checked');
+    checkboxEl.innerText = '✔';
+  }
+
+  todoItemEl.appendChild(checkboxEl);
+  todoItemEl.appendChild(todoEl);
+  todoItemEl.appendChild(delBtnEl);
+  todoListEl.appendChild(todoItemEl);
+}
+```
+{: file='todo.js'}
+
+ 2. clearCompletedTodos() 구현
+   - clearCompletedTodos()의 구현은 todos 배열을 현재 완료되지 않은 할 일 리스트로 변경해 준 후, paintTodos()함수로 투두리스트를 재 렌더링합니다. 
+
+```js
+const clearCompletedTodos = () => {
+  const newTodos = getActiveTodos()
+  setTodos(newTodos)
+  paintTodos();
+}
+```
+{: file='todo.js'}
