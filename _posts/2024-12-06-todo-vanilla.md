@@ -472,7 +472,7 @@ const appendTodos = (text) => {
 ```
 {: file='todo.js'}
 
-newId 변수는 새롭게 저장되는 할 일의 id값이며, ++연상자를 통해 1씩 증가시킴으로써 id값이 중복되지 않도록 해줍니다. newTodos는 새롭게 저장될 todos 배열로 getAlltodos()함수를 통해 이전 todos 배열을 가져온 후, 새롭게 추가된 할 일을 concat()을 통해 newTodo에 저장합니다. concat()을 사용하는 이유는 concat()은 기존 todos배열에 아무런 영향을 주지 않고 todos배열을 복사한 값에 추가한 할일을 더해 반환해주기 때문입니다. 이렇게 반환 된 newTodos를 setTodos()라는 함수로 기존 todos 배열을 변경시켜줍니다.
+newId 변수는 새롭게 저장되는 할 일의 id값이며, ++연산자를 통해 1씩 증가시킴으로써 id값이 중복되지 않도록 해줍니다. newTodos는 새롭게 저장될 todos 배열로 getAlltodos()함수를 통해 이전 todos 배열을 가져온 후, 새롭게 추가된 할 일을 concat()을 통해 newTodo에 저장합니다. concat()을 사용하는 이유는 concat()은 기존 todos배열에 아무런 영향을 주지 않고 todos배열을 복사한 값에 추가한 할일을 더해 반환해주기 때문입니다. 이렇게 반환 된 newTodos를 setTodos()라는 함수로 기존 todos 배열을 변경시켜줍니다.
 
 concat()말고 다른 방법으로는 스프레드 연산자를 사용해서 위 소스 중 주석과 같이 선언할 수 있습니다.
 
@@ -582,7 +582,7 @@ const completeTodo = (todoId) => {
 ```
 {: file='todo.js'}
 
-체크박스를 ckick하면 completeTodo() 함수가 실행되며, 동작 방식은 삭제 기능과 거의 같습니다. 차이점은 삭제에서는 Array filter()를 사용해서 삭제하고자 하는 할 일을 제외한 배열을 만들었으면, 완료 처리는 Array map()을 사용하여 완료 처리를 하고자 하는 할 일의 isCompleted 값을 토글(true이면 false로, false면 true로) 처리하여 새로운 todos 배열을 저장합니다. 이후 HTML은 paintTodos() 함수를 통해 변경된 todos를 재 렌더링합니다.
+체크박스를 click하면 completeTodo() 함수가 실행되며, 동작 방식은 삭제 기능과 거의 같습니다. 차이점은 삭제에서는 Array filter()를 사용해서 삭제하고자 하는 할 일을 제외한 배열을 만들었으면, 완료 처리는 Array map()을 사용하여 완료 처리를 하고자 하는 할 일의 isCompleted 값을 토글(true이면 false로, false면 true로) 처리하여 새로운 todos 배열을 저장합니다. 이후 HTML은 paintTodos() 함수를 통해 변경된 todos를 재 렌더링합니다.
 
 ## 할 일 수정하기
  1. 더블 클릭 시 수정 모드 전환
@@ -609,7 +609,7 @@ const paintTodos = () => {
 ```
 {: file='todo.js'}
 
-onDbclickTodo() 함수는 두 개의 파라미터를 받습니다. 첫번째 파라미터는 event객체이며, 두번째 파라미터는 할 일의 id입니다. onDbclickTodo() 함수를 통해 새로은 input요소를 만들어 사용자가 수정할 수 있도록 하겠습니다.
+onDbclickTodo() 함수는 두 개의 파라미터를 받습니다. 첫번째 파라미터는 event객체이며, 두번째 파라미터는 할 일의 id입니다. onDbclickTodo() 함수를 통해 새로운 input요소를 만들어 사용자가 수정할 수 있도록 하겠습니다.
 
 ```js
 const onDbclickTodo = (e, todoId) => {
@@ -645,7 +645,7 @@ const onDbclickTodo = (e, todoId) => {
 document.createElement() 함수를 통해 inputEl이라는 input요소를 만들고 inputEl의 value값으로 event객체의 innerText를 넣어줍니다. inputElem의 클래스 네임으로는 'edit-input'이라고 지정합니다. 'edit-input' 클래스 네임을 가지는 요소를 position: absolute로 정의하여 수정하고자 하는 todoItemElem영역을 position을 활용해 완전히 가리도록 스타일링하였습니다.
 
  2. 수정하기
-   - 수정을 위해 만들어준 input요소에서 'Enter'키가 눌리면, 기존의 할 일 내용을 updateTodo() 함수를 통해 수정합니다. updateTodo()는 두개의 파라미터를 받습니다. 첫쨰는 text로 수정될 할 일의 내용이며, 두번쨰는 todoId로 수정 될 할 일의 id입니다.  
+   - 수정을 위해 만들어준 input요소에서 'Enter'키가 눌리면, 기존의 할 일 내용을 updateTodo() 함수를 통해 수정합니다. updateTodo()는 두개의 파라미터를 받습니다. 첫번째는 text로 수정될 할 일의 내용이며, 두번째는 todoId로 수정 될 할 일의 id입니다.  
 
 ```js
 const updateTodo = (text, todoId) => {
@@ -814,17 +814,17 @@ const setLeftItems = () => {
 남은 할 일 개수를 표현하는 setLeftItems()함수는 todos의 배열의 길이와 완료상태가 변할 때 호출되는 함수[ init(), appendTodos(), deleteTodo(), completeTodo(), onClickCompleteAll() ]에 각각 적용해 주도록 합니다. 
 
 ## 하단 필터링 버튼 기능 구현
-투두리스트 하단의 All, Active, Completed, Completed Clear 버튼의 기능을 구현하겠습니다. 각각의 버튼 역할을 다음과 같습니다.
+투두리스트 하단의 전체 할 일, 남은 할 일, 완료 된 할 일, 완료 된 할 일 삭제 버튼의 기능을 구현하겠습니다. 각각의 버튼 역할을 다음과 같습니다.
 
-| filter         | Description                                      |
-| :------------- | :----------------------------------------------- | 
-| All            | 전체 투두리스트를 보여준다                         | 
-| Active         | 완료되지 않은 할 일 리스트를 보여준다               | 
-| Completed      | 완료된 할 일 리스트를 보여준다                     |
-| Completed Clear| 완료된 할 일 리스트를 전체 투두리스트에서 삭제한다   |
+| filter             | Description                                      |
+| :----------------- | :----------------------------------------------- | 
+| 전체 할 일          | 전체 투두리스트를 보여준다                         | 
+| 남은 할 일          | 완료되지 않은 할 일 리스트를 보여준다               | 
+| 완료 된 할 일       | 완료된 할 일 리스트를 보여준다                      |
+| 완료 된 할 일 삭제   | 완료된 할 일 리스트를 전체 투두리스트에서 삭제한다   |
 
  1. 각각의 버튼에 이벤트 리스너 등록하기
-   - 우선 todos.js 파일 상단에 All, Active, Completed, Completed Clear 버튼 요소를 querySelector로 가져옵니다. 그리고 init()함수 안에서 각각의 버튼에 'click'에 대한 이벤트 리스너를 등록해줍니다. All, Active, Completed 버튼에는 onClickShowTodosType()함수를 콜백으로 호출하며, Completed Clear 버튼에는 clearCompletedTodos()함수를 콜백으로 호출합니다.
+   - 우선 todos.js 파일 상단에 전체, 남은, 완료 된, 완료 삭제 버튼 요소를 querySelector로 가져옵니다. 그리고 init()함수 안에서 각각의 버튼에 'click'에 대한 이벤트 리스너를 등록해줍니다. All, Active, Completed 버튼에는 onClickShowTodosType()함수를 콜백으로 호출하며, Completed Clear 버튼에는 clearCompletedTodos()함수를 콜백으로 호출합니다.
 
 ```js
 const showAllBtnElem = document.querySelector('.show-all-btn');	// All 버튼 
