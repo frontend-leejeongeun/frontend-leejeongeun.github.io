@@ -19,12 +19,12 @@ render_with_liquid: false
  1. 전체 선택
    - Section전체 완료되지 않음 상태 일 때는 회색으로 표시
    - 전체 완료된 상태는 초록색으로 표시
-   - 해당 버튼을 누르면 모든 할 일이 완료된 상태로 바뀜
-   - 이미 모두 완료된 상태일 때, 누르면 전체 할 일 리스트가 완료되지 않은 상태로 변함
+   - 해당 버튼을 누르면 모든 할 일이 완료된 상태로 바뀐다
+   - 이미 모두 완료된 상태일 때, 누르면 전체 할 일 리스트가 완료되지 않은 상태로 변한다
 
  2. 할 일 입력 
-   - 사용자로부터 입력을 받음
-   - Enter Key를 누르면 할 일이 추가됨
+   - 사용자로부터 입력을 받는
+   - Enter Key를 누르면 할 일이 추가된다
    - 할 일이 추가된 이후, 입력창의 value를 초기화
 
  3. 체크박스
@@ -32,23 +32,26 @@ render_with_liquid: false
    - 해당 버튼을 누를 시, 할 일의 완료상태(isCompleted) 값을 토글 시킨다.
 
  4. 할 일 내용
-   - 할 일 내용이 표시됨
+   - 할 일 내용이 표시된다
    - 완료된 일이면 이태리체, 회색, 가운데선으로 표시
-   - 마우스로 더블 클릭 시, 할 일 내용을 수정할 수 있음
+   - 마우스로 더블 클릭 시, 할 일 내용을 수정할 수 있다
 
  5. 할 일 삭제
-   - 해당 할 일을 투두리스트에서 삭제함
+   - 해당 할 일을 투두리스트에서 삭제한다
 
- 6. 완료되지 않은 할 일 개수 표시
-   - 완료되지 않은 할 일(Active)의 개수를 표시한다.
+ 6. 남은 할 일
+   - 완료되지 않은 할 일의 개수를 표시한다.
 
- 7. All 버튼
+ 7. 전체 할 일 버튼
    - 투두리스트의 모든 할 일을 보여준다.
 
- 8. Active 버튼
+ 8. 남은 할 일 버튼
    - 투두리스트에서 아직 완료되지 않은 일을 보여준다.
 
- 9. Clear Completed 버튼
+ 9. 완료 된 할 일 버튼
+   - 완료된 일을 보여준다.
+
+ 10. 완료 된 할 일 삭제 버튼
    - 완료된 일을 투두리스트에서 삭제한다.
 
 ## HTML과 CSS 적용하기
@@ -528,14 +531,14 @@ const paintTodos = () => {
 
   //"todo-item"에 해당하는 HTML을 그려서 "todo-list"에 추가하기
   allTodos.forEach(todo => { 
-    ...생략
+    (...생략)
     
     const delBtnEl = document.createElement('buttom');
     delBtnEl.classList.add('delBtn');
     delBtnEl.addEventListener('click', ()=>{deletTodo(todo.id)}) // 'click'이벤트 발생 시, 해당 할 일 삭제
     delBtnElem.innerHTML = 'X';
 
-    ...생략
+    (...생략)
   })
 }
 ```
@@ -564,13 +567,13 @@ const paintTodos = () => {
 
   //"todo-item"에 해당하는 HTML을 그려서 "todo-list"에 추가하기
   allTodos.forEach(todo => { 
-    ...생략
+    (...생략)
     
     const checkboxEl = document.createElement('div');
     checkboxEl.classList.add('checkbox');
     checkboxEl.addEventListener('click',() => completeTodo(todo.id)) // 'click'이벤트 발생 시, 완료 처리
 
-    ...생략
+    (...생략)
   })
 }
 
@@ -587,7 +590,7 @@ const completeTodo = (todoId) => {
 ## 할 일 수정하기
  1. 더블 클릭 시 수정 모드 전환
    - 기능 정의에 2번 input창을 더블 클릭하면 수정 모드로 전환하는 기능을 추가합니다.
-   이전에 만들었던 paintTdos()함수에 todoEl이 만들어질 때 더블 클릭에 대한 이벤트 리스너를 등록합니다. 그리고 todoEl 요소에 더블 클릭 이벤트가 발생하면 콜백 함수로 onDbclickTodo() 함수가 호출됩니다.
+   이전에 만들었던 paintTodos()함수에 todoEl이 만들어질 때 더블 클릭에 대한 이벤트 리스너를 등록합니다. 그리고 todoEl 요소에 더블 클릭 이벤트가 발생하면 콜백 함수로 onDbclickTodo() 함수가 호출됩니다.
 
 ```js
 const paintTodos = () => {
@@ -596,14 +599,14 @@ const paintTodos = () => {
 
   //"todo-item"에 해당하는 HTML을 그려서 "todo-list"에 추가하기
   allTodos.forEach(todo => { 
-    ...생략
+    (...생략)
     
     const todoEl = document.createElement('div');
     todoEl.classList.add('todo');
     todoEl.addEventListener('dblclick', (event) => onDbclickTodo(event, todo.id)) // 더블 클릭에 대한 이벤트 핸들러
     todoEl.innetText = todo,content;
 
-    ...생략
+    (...생략)
   })
 }
 ```
@@ -642,7 +645,7 @@ const onDbclickTodo = (e, todoId) => {
 ```
 {: file='style.css'}
 
-document.createElement() 함수를 통해 inputEl이라는 input요소를 만들고 inputEl의 value값으로 event객체의 innerText를 넣어줍니다. inputElem의 클래스 네임으로는 'edit-input'이라고 지정합니다. 'edit-input' 클래스 네임을 가지는 요소를 position: absolute로 정의하여 수정하고자 하는 todoItemElem영역을 position을 활용해 완전히 가리도록 스타일링하였습니다.
+document.createElement() 함수를 통해 inputEl이라는 input요소를 만들고 inputEl의 value값으로 event객체의 innerText를 넣어줍니다. inputEl의 클래스 네임으로는 'edit-input'이라고 지정합니다. 'edit-input' 클래스 네임을 가지는 요소를 position: absolute로 정의하여 수정하고자 하는 todoItemEl영역을 position을 활용해 완전히 가리도록 스타일링하였습니다.
 
  2. 수정하기
    - 수정을 위해 만들어준 input요소에서 'Enter'키가 눌리면, 기존의 할 일 내용을 updateTodo() 함수를 통해 수정합니다. updateTodo()는 두개의 파라미터를 받습니다. 첫번째는 text로 수정될 할 일의 내용이며, 두번째는 todoId로 수정 될 할 일의 id입니다.  
@@ -770,9 +773,9 @@ const onClickCompleteAll = () => {
 
 onClickCompleteAll() 함수를 통해 isAllCompleted 상태를 토글 시켜주며, 기존의 todos를 배열의 isCompleted를 바뀌는 isAllChecked 상태에 맞춰서 바꿔줍니다. isAllCheked값이 false가 되면, 전체 todos배열의 isCompleted값을 false로 바꿔주며, isAllChecked값이 true가 되면, 전체 todos배열의 isCompleted값을 true로 바꿔줍니다. 그 후, paintTodos()함수를 통해 todos를 재 렌더링해줍니다.
 
-이때 completeAllBtnElem 요소는 클릭 될 때만 isAllCompleted상태 값이 변하는 것이 아니라, 각각의 할 일 들을 완료 처리 할때와 새로운 할 일이 추가 될때도  isAllCompleted의 상태가 변하고, HTML에 표시해주어야 합니다. 
+이때 completeAllBtnEl 요소는 클릭 될 때만 isAllCompleted상태 값이 변하는 것이 아니라, 각각의 할 일 들을 완료 처리 할때와 새로운 할 일이 추가 될때도  isAllCompleted의 상태가 변하고, HTML에 표시해주어야 합니다. 
 
-이를 위해 checkIsAllCompleted()라는 함수를 만들어 줍니다. checkIsAllCompleted()함수는 현재 todos배열의 길이와, 완료된 todos배열의 길이를 비교한 후, isAllCompleted의 상태를 변경하고 completeAllBtnElem요소에 'checked' 클래스 네임을 추가 또는 삭제합니다.
+이를 위해 checkIsAllCompleted()라는 함수를 만들어 줍니다. checkIsAllCompleted()함수는 현재 todos배열의 길이와, 완료된 todos배열의 길이를 비교한 후, isAllCompleted의 상태를 변경하고 completeAllBtnEl요소에 'checked' 클래스 네임을 추가 또는 삭제합니다.
 
 새롭게 만든 checkIsAllCompleted()함수를 completeTodo()함수와 appendTodos()함수에 추가해주면, 각각의 할 일이 완료 처리가 될 때와, 새로운 할 일이 추가 될때마다 전체 할 일의 완료 여부를 파악하여 이를 표현해 줄 수 있습니다.
 
@@ -785,7 +788,7 @@ const completeTodo = (todoId) => {
 }
 
 const appendTodos = (text) => {
-  ...생략
+  (...생략)
   checkIsAllCompleted(); // 전체 완료처리 확인
   paintTodos();
 }
@@ -827,20 +830,20 @@ const setLeftItems = () => {
    - 우선 todos.js 파일 상단에 전체, 남은, 완료 된, 완료 삭제 버튼 요소를 querySelector로 가져옵니다. 그리고 init()함수 안에서 각각의 버튼에 'click'에 대한 이벤트 리스너를 등록해줍니다. All, Active, Completed 버튼에는 onClickShowTodosType()함수를 콜백으로 호출하며, Completed Clear 버튼에는 clearCompletedTodos()함수를 콜백으로 호출합니다.
 
 ```js
-const showAllBtnElem = document.querySelector('.show-all-btn');	// All 버튼 
-const showActiveBtnElem = document.querySelector('.show-active-btn'); // Active 버튼
-const showCompletedBtnElem = document.querySelector('.show-completed-btn'); // Completed 버튼
-const clearCompletedBtnElem = document.querySelector('.clear-completed-btn'); // Completed Clear 버튼
+const showAllBtnEl = document.querySelector('.show-all-btn');	// All 버튼 
+const showActiveBtnEl = document.querySelector('.show-active-btn'); // Active 버튼
+const showCompletedBtnEl = document.querySelector('.show-completed-btn'); // Completed 버튼
+const clearCompletedBtnEl = document.querySelector('.clear-completed-btn'); // Completed Clear 버튼
 
 const init = () => {
-  ...생략 
+  (...생략) 
 
-  showAllBtnElem.addEventListener('click', onClickShowTodosType);
-  showActiveBtnElem.addEventListener('click', onClickShowTodosType);
-  showCompletedBtnElem.addEventListener('click', onClickShowTodosType);
-  clearCompletedBtnElem.addEventListener('click', clearCompletedTodos);
+  showAllBtnEl.addEventListener('click', onClickShowTodosType);
+  showActiveBtnEl.addEventListener('click', onClickShowTodosType);
+  showCompletedBtnEl.addEventListener('click', onClickShowTodosType);
+  clearCompletedBtnEl.addEventListener('click', clearCompletedTodos);
 
-  checkAllBtnElem.addEventListener('click',  onClickCheckAll)
+  checkAllBtnEl.addEventListener('click',  onClickCheckAll)
   setLeftItems();
 }
 
@@ -879,7 +882,7 @@ onClickShowTodosType()는 현재 클릭된 버튼 요소인 currentBtnElem의 da
 
 ```js
 const paintTodos = () => {
-  todoListElem.innerHTML = '';
+  todoListEl.innerHTML = '';
 
   switch (currentShowType) {
     case 'all':
