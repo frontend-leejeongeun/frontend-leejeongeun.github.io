@@ -1,70 +1,96 @@
-# Getting Started with Create React App
+# 🚀 Frontend Portfolio
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+![Portfolio Preview](./src/assets/images/main.png) <!-- 배포 후 스크린샷 추가 -->
 
-## Available Scripts
+## 📌 프로젝트 소개
 
-In the project directory, you can run:
+이 프로젝트는 React와 Javascript, Tailwind CSS를 활용하여 제작한 개인 포트폴리오 웹사이트입니다.
+프론트엔드 개발자로서의 역량을 보여주기 위해 다양한 기술을 적용하였습니다.
 
-### `npm start`
+## 🔗 배포 링크
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+[포트폴리오 사이트 보기](https://frontend-leejeongeun.github.io)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+---
 
-### `npm test`
+## 🛠 사용 기술
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **프레임워크 & 라이브러리**: React, React Router
+- **스타일링**: Tailwind CSS
+- **배포**: GitHub Pages
 
-### `npm run build`
+---
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 📂 프로젝트 구조
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```plaintext
+📦 my-portfolio
+├── 📂 public           # 정적 파일
+├── 📂 src              # 소스 코드
+│   ├── 📂 assets
+│   │   ├── 📂css
+│   │   ├── 📂images
+│   ├── 📂 components  # 재사용 가능한 컴포넌트
+│   │   ├── Header.jsx
+│   │   ├── Footer.jsx
+│   │   ├── Projects.jsx
+│   │   ├── Experience.jsx
+│   │   ├── Introduce.jsx
+│   │   ├── Skills.jsx
+│   ├── 📂 pages       # 페이지 컴포넌트
+│   │   ├── Home.jsx
+│   │   ├── Post.jsx
+│   ├── App.jsx        # 라우팅 설정
+│   ├── index.jsx      # 엔트리 포인트
+├── .gitignore
+├── tailwind.config.js # Tailwind 설정
+├── postcss.config.js  # PostCSS 설정
+├── package.json       # 프로젝트 설정 파일
+├── README.md          # 프로젝트 설명서
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+---
 
-### `npm run eject`
+## ⚙️ 설치 및 실행 방법
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### 1. 저장소 클론
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```sh
+git clone https://github.com/frontend-leejeongeun/frontend-leejeongeun.github.io.git
+cd frontend-leejeongeun.github.io
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### 2. 패키지 설치
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```sh
+npm install
+```
 
-## Learn More
+### 3. 로컬 서버 실행
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```sh
+npm start    # React CRA 사용 시
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+---
 
-### Code Splitting
+## 🎨 주요 기능
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+- **반응형 디자인**: Tailwind CSS를 활용한 모바일/데스크톱 대응
+- **라우팅 시스템**: React Router로 페이지 이동 구현
+- **프로젝트 소개**: 개인 프로젝트 및 개발 경험 정리
+- **연락처 페이지**: 폼을 통해 이메일 문의 가능
+- **GitHub Pages 배포**: 정적 웹사이트로 쉽게 배포 가능
 
-### Analyzing the Bundle Size
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## 📢 개선할 점 및 업데이트 예정
 
-### Making a Progressive Web App
+- 메인 내용정리 🌙
+- 프로젝트 상세 페이지 추가(라우팅, 내용정리) 🔍
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+---
 
-### Advanced Configuration
+## 📝 라이선스
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+이 프로젝트는 MIT 라이선스를 따릅니다.
