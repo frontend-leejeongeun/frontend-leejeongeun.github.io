@@ -5,6 +5,7 @@
   "dependencies": {
     "@heroicons/react": "^2.2.0",
     "cra-template": "1.2.0",
+    "framer-motion": "^12.4.2",
     "github-markdown-css": "^5.8.1",
     "gray-matter": "^4.0.3",
     "highlight.js": "^11.11.1",
