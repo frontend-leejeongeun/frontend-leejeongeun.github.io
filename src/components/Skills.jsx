@@ -4,31 +4,20 @@ export default function Skills() {
       <h2 className="heading">Skills</h2>
       <ul>
         <li>JavaScript</li>
-        <li>Python</li>
-        <li>Ruby</li>
-        <li>Go</li>
-        <li>Node.js</li>
-        <li>AngularJs</li>
+        <li>TypeScript</li>
+        <li>Html</li>
+        <li>Css</li>
+        <li>Sass</li>
         <li>React</li>
-        <li>Elixir</li>
-        <li>Java</li>
-        <li>C</li>
-        <li>C#</li>
-        <li>C++</li>
-        <li>Ruby on Rails</li>
-        <li>JavaScript</li>
-        <li>Python</li>
-        <li>Ruby</li>
-        <li>Go</li>
+        <li>Vue</li>
+        <li>Next.js</li>
         <li>Node.js</li>
-        <li>AngularJs</li>
-        <li>React</li>
-        <li>Elixir</li>
-        <li>Java</li>
-        <li>C</li>
-        <li>C#</li>
-        <li>C++</li>
-        <li>Ruby on Rails</li>
+        <li>Ruby</li>
+        <li>Express</li>
+        <li>Git</li>
+        <li>Jira</li>
+        <li>Confluence</li>
+        <li>Figma</li>
       </ul>
     </div>
   );

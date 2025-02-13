@@ -18,7 +18,7 @@ export default function Introduce() {
       <div id="introduce-content">
         <div className="mimoticon"></div>
         <h1>Lee Jeongeun</h1>
-        <h2>Frongtend Engineer</h2>
+        <h2>Frontend Engineer</h2>
       </div>
 
       <div id="introduce-overlay"></div>
