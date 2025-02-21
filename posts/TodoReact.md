@@ -719,4 +719,83 @@ const handleClearCompletedTodos = () => {
 };
 ```
 
+## 리팩토링
+
+기능적인 부분을 완료 후 리액트에 맞게 리팩토링을 진행했습니다.
+
+1.  비동기 상태 업데이트 최적화 (prevTodos 활용)
+
+- 기존에는 setTodos([...todos, newTodo]) 형식으로 상태를 업데이트하였으나, 비동기 특성을 고려하여 prevTodos를 사용하도록 변경했습니다.
+
+```jsx
+const addTodo = (content) => {
+  setTodos((prevTodos) => [
+    ...prevTodos,
+    { id: Date.now(), content, isCompleted: false },
+  ]);
+};
+```
+
+2.  모든 할 일 완료/해제 시 prevTodos 적용
+
+- 모든 할 일의 완료 상태를 변경하는 함수에서 prevTodos를 사용하여 비동기 업데이트 문제를 해결했습니다.
+
+```jsx
+const handleCompleteAll = () => {
+  setTodos((prevTodos) => {
+    const allCompleted = prevTodos.every((todo) => todo.isCompleted);
+    return prevTodos.map((todo) => ({ ...todo, isCompleted: !allCompleted }));
+  });
+};
+```
+
+3.  useMemo 활용하여 불필요한 연산 줄이기
+
+- 필터링된 목록을 매번 계산하는 대신, useMemo를 사용하여 필요할 때만 연산되도록 변경했습니다
+
+```jsx
+const filteredTodos = useMemo(() => {
+  return todos.filter((todo) => {
+    switch (currentShowType) {
+      case "active":
+        return !todo.isCompleted;
+      case "completed":
+        return todo.isCompleted;
+      default:
+        return true;
+    }
+  });
+}, [todos, currentShowType]);
+```
+
+4.  불필요한 함수 재생성 방지 (useCallback 적용)
+
+- 핸들러 함수들을 useCallback을 사용하여 메모이제이션 처리하였습니다.
+
+```jsx
+const handleDeleteTodo = useCallback((todoId) => {
+  setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== todoId));
+}, []);
+```
+
+| 비교 항목   | 바닐라 자바스크립트                                             | 리액트                                        |
+| ----------- | --------------------------------------------------------------- | --------------------------------------------- |
+| 상태 관리   | document.querySelector, addEventListener 활용하여 직접 DOM 조작 | useState, setState로 효율적으로 관리          |
+| 렌더링 방식 | 변경된 요소만 직접 업데이트해야 함                              | 상태 변화에 따라 자동 렌더링                  |
+| 코드 구조   | 이벤트 리스너와 DOM 조작 코드가 섞여 있어 복잡해질 수 있음      | 컴포넌트 기반으로 유지보수가 용이             |
+| 성능 최적화 | 직접 최적화 필요                                                | useMemo, useCallback 등 내장 최적화 기능 제공 |
+| 재사용성    | 같은 기능이라도 반복 구현 필요                                  | 컴포넌트로 분리하여 재사용 가능               |
+
+리액트로 작업하면서 느낀점은
+
+1.  리액트의 상태 관리는 확실히 편리하다는 점입니다. useState 하나로 DOM을 직접 조작하는 과정 없이 깔끔하게 상태 변경이 가능한 것이 편리했습니다.
+
+2.  useMemo, useCallback 등을 활용하면 렌더링 성능을 최적화할 수 있고 이를 활용하여 불필요한 연산과 렌더링을 줄일 수 있었다는 점 입니다.
+
+3.  바닐라 자바스크립트는 이벤트 핸들러를 직접 관리하면서 DOM을 조작해야 했고 소스가 다소 복잡하고 지저분해 보였지만, 리액트는 컴포넌트 기반으로 코드가 깔끔하게 유지되었다는 점입니다.
+
+4.  다만 단점으로는 리액트는 처음 배우기 어렵다는 점이 있었습니다. 바닐라 자바스크립트에서는 단순한 querySelector나 addEventListener로 가능했던 작업도, 리액트에서는 useState, useEffect, useMemo 등을 학습하고 고려해야 해서 학습 난이도가 있다는 점을 느꼈습니다.
+
+이번 프로젝트를 통해 바닐라 자바스크립트와 리액트의 차이를 체감할 수 있었고, 리액트의 컴포넌트 기반 아키텍처와 상태 관리의 강력함을 다시금 느낄 수 있었다. 또한 습관적으로 쓰던 hook들에 대해 다시 한번 생각할 수 있게되어 좋은 과정이 되었습니다.
+
 전체 소스코드는 [TodosReact-github-jeongeun](https://github.com/frontend-leejeongeun/Project-Todos-React) 여기서 볼 수 있습니다.
