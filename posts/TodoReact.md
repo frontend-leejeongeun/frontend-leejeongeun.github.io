@@ -657,7 +657,7 @@ handleUpdateTodo 함수는 수정된 내용을 입력창에서 Enter 키를 누�
 
 ## 전체 완료 처리, 남은 할 일 개수, 하단 필터링 버튼 기능 구현
 
-![Desktop View](../assets/img/todo3.png){: width="700" height="400" }
+![Desktop View](./images/todo3.png){: width="700" height="400" }
 
 ##
 
@@ -796,6 +796,6 @@ const handleDeleteTodo = useCallback((todoId) => {
 
 4.  다만 단점으로는 리액트는 처음 배우기 어렵다는 점이 있었습니다. 바닐라 자바스크립트에서는 단순한 querySelector나 addEventListener로 가능했던 작업도, 리액트에서는 useState, useEffect, useMemo 등을 학습하고 고려해야 해서 학습 난이도가 있다는 점을 느꼈습니다.
 
-이번 프로젝트를 통해 바닐라 자바스크립트와 리액트의 차이를 체감할 수 있었고, 리액트의 컴포넌트 기반 아키텍처와 상태 관리의 강력함을 다시금 느낄 수 있었다. 또한 습관적으로 쓰던 hook들에 대해 다시 한번 생각할 수 있게되어 좋은 과정이 되었습니다.
+이번 프로젝트를 통해 바닐라 자바스크립트와 리액트의 차이를 체감할 수 있었고, 리액트의 컴포넌트 기반 아키텍처와 상태 관리의 강력함을 다시금 느낄 수 있었습니다. 또한 습관적으로 쓰던 hook들에 대해 다시 한번 생각할 수 있게되어 좋은 과정이 되었습니다.
 
 전체 소스코드는 [TodosReact-github-jeongeun](https://github.com/frontend-leejeongeun/Project-Todos-React) 여기서 볼 수 있습니다.
