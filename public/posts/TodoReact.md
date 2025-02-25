@@ -2,26 +2,20 @@
 투두리스트의 동작방식은 [TodoMVC](https://todomvc.com/examples/javascript-es6/dist/)와 같이 동작하도록 개발하였으며, 다음과 같은 형태입니다. 기존의 바닐라 자바스크립트와 동일한 UI,기능을 유지하도록 의도하였으며 소스코드만 다르게 작성되었습니다. 이 과정을 통해 순수자바스크립트와 리액트 프레임워크 사용시 차이점과 장단점을 좀 더 직관적으로 체감할 수 있을 것으로 기대합니다.
 이 리액트 앱의 전체 소스코드는 [TodosReact-github-jeongeun](https://github.com/frontend-leejeongeun/Project-Todos-React) 여기서 볼 수 있습니다.
 
-아래 작성내용은 초기 프로토타입 버전의 작성버전입니다.
+## 기술 스택
 
-현재는 리팩토링을 거쳐 아래의 기술스택을 사용하여 코드를 업데이트하였습니다.
-
-React: 사용자 인터페이스 구축 및 상태 관리
-Vite: 빠른 개발 환경 설정 도구
-TypeScript: 정적 타입을 제공하는 자바스크립트 상위 언어
-MobX: 상태 관리 라이브러리
-TanStack Query: 서버 상태 관리 라이브러리
-Axios: HTTP 클라이언트
-Json server: 간단한 REST API 서버 제공 (로컬)
-CSS: 애플리케이션 스타일링
-
-이에 따른 내용은 차근히 작성 예정입니다.
-
-![Desktop View](./images/todo1.png)
+- React: 사용자 인터페이스 구축 및 상태 관리
+- Vite: 빠른 개발 환경 설정 도구
+- Json server: 간단한 REST API 서버 제공 (로컬)
+- TypeScript: 정적 타입을 제공하는 자바스크립트 상위 언어
+- MobX: 상태 관리 라이브러리
+- TanStack Query: 서버 상태 관리 라이브러리
+- Axios: HTTP 클라이언트
+- CSS: 애플리케이션 스타일링
 
 ## 기능 정의하기
 
-![Desktop View](./images/todo2.png)
+![Desktop View](./images/todoreact1.png)
 
 1.  전체 선택
 
@@ -71,595 +65,185 @@ CSS: 애플리케이션 스타일링
 
 - 완료된 일을 투두리스트에서 삭제한다.
 
-## HTML과 CSS 적용하기
+## 기술스택 선정 이유
 
-먼저 [reset.css](https://meyerweb.com/eric/tools/css/reset/)를 index.css에 적용해 주었습니다. reset.css는 브라우저 간의 스타일 불일치를 해소하는 크로스브라우징을 목적으로 사용하는데 이는 기본적으로 설정되어있는 브라우저 스타일 설정이 개발하는데 불편을 주기 때문입니다. reset.css를 통해 이미 설정되어 있는 스타일을 적용하여 리셋 후 개발하였습니다.
+1.  MobX와 React Query 그리고 Typescript
 
-HTML과 CSS는 다음과 같이 적용하였습니다.
+- React에서는 상태 관리와 가상 DOM을 React가 비교 후 렌더링하는 특징이 있기 때문에 React의 사용법에 맞게 코드를 작성했습니다. 초반 프로토타입으로 작성했을때는 useState 와 useEffect Hook을 사용해서 상태를 관리했는데 이 과정에서 부모와 자식으로 연결 된 prop들과 종속관계에 의해 관련된 컴포넌트의 불필요한 렌더링이 일어나는 것을 볼 수 있었습니다. 이 점을 보완하고자 useCallback과 useMemo hook을 사용해 필요한 곳에서 최적화를 진행해주어야 했는데 이 부분이 번거롭게 느껴졌습니다. 사실 이 프로젝트는 소규모의 개인프로젝트이기 때문에 프로토타입으로 그대로 가도 성능 차이가 크게 느껴지지 않겠지만 대규모 프로젝트를 진행할 경우를 대비하여 이 프로젝트에서 MobX를 상태 관리 라이브러리로 사용하여 상태 관리를 간소화하고, React Query를 통해 API와의 상호작용을 쉽게 처리하도록 진행해보았습니다. MobX는 상태관리를 자동으로 추적하며 직접적인 영향이 있는 컴포넌트만 렌더링을 해주는 상태관리 라이브러리인데 @observable, @computed, @action 같은 개념을 익혀야 하기때문에 러닝커브가 있을거라고 생각했지만 사용해보기로 결정했습니다. (Zustand를 사용할까 고민도 해 보았지만 차후 프로젝트에서 비교를 위해 이번 프로젝트에서는 MobX를 사용해봅니다.) 또한 타입스크립트를 사용하여 오류를 줄이고 타입추론을 가능하게 했습니다. 빌드는 vite를 사용하기로 합니다.
 
-```jsx
-import "./App.css";
-function App() {
-  return (
-    <section className="todo-wrapper">
-      <header className="todo-title">todos</header>
-      <main className="todo-box">
-        <div className="todo-input-box">
-          <button className="complete-all-btn">✔</button>
-          <input
-            type="text"
-            className="todo-input"
-            placeholder="해야 할 일을 입력해주세요. Enter"
-          />
-        </div>
-        <ul className="todo-list"></ul>
-        <div className="todo-bottom">
-          <div className="left-items"></div>
-          <div className="button-group">
-            <button className="show-all-btn selected" data-type="all">
-              전체 할 일
-            </button>
-            <button clasNames="show-active-btn" data-type="active">
-              남은 할 일
-            </button>
-            <button className="show-completed-btn" data-type="completed">
-              완료 된 할 일
-            </button>
-          </div>
-          <button className="clear-completed-btn">완료 된 할 일 삭제</button>
-        </div>
-      </main>
-      <footer className="info">더블클릭 시 수정 가능!</footer>
-    </section>
-  );
-}
+## 상태 관리
 
-export default App;
-```
+1. MobX
+   store.ts 파일에 상태 관리를 위한 TodoStore 클래스를 정의합니다.
+   MobX의 makeAutoObservable을 사용하여 자동으로 관찰 가능한 상태를 만듭니다.
+   MobX를 사용할 때 주의점은 컴포넌트가 MobX의 상태를 관찰하도록 설정되어 있어야 하는데 이를 위해 아래 main 페이지에서 observer로 컴포넌트를 감싸야 했습니다. 만약 observer로 감싸지 않은 상태에서 MobX 상태를 사용하면 UI가 업데이트되지 않을 수 있기때문에 주의해야 했습니다. 또 작업을 하면서 MobX가 디버깅이 어렵다는 평가가 있었는데 이는 자동으로 상태가 변경되므로 원인을 추적하기 어렵기 때문이었습니다. 자동 상태 반영이 장점이자 단점이 된 셈입니다.
+   이를 보완하기 위해서는 mobx-logger를 사용해서 상태 변경을 로그로 기록해 관리하거나 더 직관적으로 확인하려면 MobX Developer Tools를 사용하면 단점을 보완할 수 있다고 합니다. 코드를 리팩토링하면서 점차 써보는것을 목표로 잡아도 좋을것같다고 생각했습니다. 아래 소스코드를 보면 makeAutoObservable 외에도 configure라는 것을 사용한것을 볼 수 있는데 MobX가 자동 추적 반영인만큼 의도치 않은 상태 변경 발생 가능성을 배제할 수 없기 때문에 (특히 computed 값) configure({ enforceActions: "always" }) 옵션을 활성화해서 반드시 action 함수 안에서만 상태를 변경할 수 있도록 예측 가능성이 높였습니다.
 
-html {
-height: 100%;
-}
+```ts
+import { makeAutoObservable, configure } from "mobx";
 
-body {
-display: flex;
-flex-wrap: nowrap;
-justify-content: center;
-background-color: #f5f5f5;
-min-height: 100%;
-}
-
-.todo-wrapper {
-justify-content: center;
-margin-top: 3rem;
-min-width: 600px;
-}
-
-.todo-title {
-padding: 2rem;
-text-align: center;
-color: rosybrown;
-font-size: 5rem;
-}
-
-.todo-box {
-background-color: white;
-border: 1px solid #ddd;
-}
-
-.todo-input-box {
-display: flex;
-flex-wrap: nowrap;
-flex-direction: row;
-height: 3rem;
-border-bottom: 1px solid #ddd;
-justify-content: flex-start;
-align-items: center;
-}
-
-button {
-background-color: transparent;
-border: 0;
-}
-
-.complete-all-btn {
-color: gray;
-min-width: none;
-min-height: none;
-width: 1.5rem;
-height: 1.5rem;
-margin: 0.5rem 0.5rem;
-border-radius: 50px;
-cursor: pointer;
-font-size: 1.2rem;
-}
-
-.complete-all-btn.checked {
-color: green;
-}
-
-.todo-input {
-width: 80%;
-text-align: center;
-border: 0;
-outline: none;
-font-size: 1.3rem;
-}
-
-.todo-item {
-position: relative;
-display: flex;
-flex-wrap: nowrap;
-flex-direction: row;
-justify-content: space-between;
-align-items: center;
-height: 3rem;
-border-bottom: 1px solid #ddd;
-}
-
-.todo-item:hover .delBtn {
-opacity: 1;
-}
-
-.checkbox {
-min-width: none;
-min-height: none;
-width: 1.5rem;
-height: 1.5rem;
-margin: 0.5rem 0.5rem;
-border-radius: 50px;
-border: 1px solid lightgray;
-cursor: pointer;
-text-align: center;
-}
-
-.todo-item.checked .checkbox {
-border: 2px solid darkgray;
-color: green;
-}
-
-.todo {
-font-size: 1.3rem;
-padding: 0 1rem;
-width: 80%;
-}
-
-.todo-item.checked .todo {
-font-style: italic;
-text-decoration: line-through;
-color: lightgray;
-}
-
-.delBtn {
-opacity: 1;
-width: 3rem;
-height: 3rem;
-font-size: 1.5rem;
-font-weight: lighter;
-cursor: pointer;
-}
-
-.todo-bottom {
-height: 3rem;
-display: flex;
-flex-wrap: nowrap;
-flex-direction: row;
-justify-content: space-between;
-align-items: center;
-padding: 0 1rem;
-}
-
-.button-group {
-flex-direction: row;
-flex-wrap: nowrap;
-}
-
-.button-group button {
-border: 1px solid #eee;
-padding: 0.2rem 0.5rem;
-margin: 0 0.5rem;
-border-radius: 8px;
-cursor: pointer;
-}
-
-.button-group button.selected {
-border: 2px solid rosybrown;
-padding: 0.2rem 0.5rem;
-margin: 0 0.5rem;
-border-radius: 8px;
-}
-
-.clear-completed-btn:hover {
-font-style: italic;
-text-decoration: underline;
-cursor: pointer;
-}
-
-.edit-input {
-position: absolute;
-left: 0;
-top: 0;
-width: 590px;
-height: 2.8rem;
-margin: 0;
-}
-
-.info {
-margin-top: 1.5rem;
-text-align: center;
-color: #ccc;
-}
-
-````
-
-## 할 일 추가하기
-
-1.  사용자 입력에 대한 상태 관리 하기
-
-- 순수 자바스크립트로 작성할 때에는 document.querySelector도 직접적인 DOM 조작을 하여 이벤트를 처리했는데 React에서는 상태 관리와 DOM을 React가 직접 처리하기 때문에, React의 방식에 맞게 코드를 수정했습니다. useState Hooks를 사용했는데 newTodo라는 상태를 만들어서 텍스트 입력 값을 관리하고 todos 상태는 할 일 목록을 관리합니다. 또한 input에 입력 필드의 변경을 감지하는 handleInputChange와 키가 눌렸을 때 handleKeyDown를 추가해주었습니다. (리액트에서는 onKeyPress는 Enter나 Backspace같은 특정 키를 감지하지 못할수 있어 권장되지 않는 이유로 onKeyDown을 사용했습니다.) 이들은 각각 newTodo 상태를 업데이트하도록 하고고 todos에 새로운 할 일을 추가하고 newTodo를 비울 수 있도록 했습니다.
-  마지막으로 할일을 렌더링 하기기 위해 jsx 문법을 사용해서 todos.map으로 할 일 목록을 렌더링 하고 있습니다.
-
-```jsx
-import "./App.css";
-import React, { useState } from "react";
-
-function App() {
-  const [todos, setTodos] = useState([]);
-  const [newTodo, setNewTodo] = useState("");
-
-  const handleInputChange = (e) => {
-    setNewTodo(e.target.value); // 입력값을 상태로 저장
-  };
-
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      setTodos([
-        ...todos,
-        { id: Date.now(), content: newTodo, isCompleted: false },
-      ]); // 새로운 Todo 추가
-      setNewTodo(""); // 입력 필드 초기화
-    }
-  };
-
-  return (
-    <section className="todo-wrapper">
-      <header className="todo-title">todos</header>
-      <main className="todo-box">
-        <div className="todo-input-box">
-          <button className="complete-all-btn">✔</button>
-          <input
-            type="text"
-            className="todo-input"
-            placeholder="해야 할 일을 입력해주세요. Enter"
-            value={newTodo} // 현재 입력값을 상태에서 관리
-            onChange={handleInputChange} // 입력값 변화 감지
-            onKeyDown={handleKeyDown} // Enter키 입력 감지
-          />
-        </div>
-        <ul className="todo-list">
-          {todos.map((todo) => (
-            <li className="todo-item" key={todo.id}>
-              <div className="checkbox"></div>
-              <div className="todo">{todo.content}</div>
-              <button className="delBtn">X</button>
-            </li> // 할 일 목록을 렌더링
-          ))}
-        </ul>
-        <div className="todo-bottom">
-          <div className="left-items"></div>
-          <div className="button-group">
-            <button className="show-all-btn selected" data-type="all">
-              전체 할 일
-            </button>
-            <button className="show-active-btn" data-type="active">
-              남은 할 일
-            </button>
-            <button className="show-completed-btn" data-type="completed">
-              완료 된 할 일
-            </button>
-          </div>
-          <button className="clear-completed-btn">완료 된 할 일 삭제</button>
-        </div>
-      </main>
-      <footer className="info">더블클릭 시 수정 가능!</footer>
-    </section>
-  );
-}
-
-export default App;
-````
-
-2.  할 일 추가하기
-
-- todos 배열에 할 일을 추가하는 appendTodos()함수를 만들었습니다. 할 일은 다음과 같은 타입을 가집니다.
-
-| Element     | Type    |
-| :---------- | :------ |
-| id          | number  |
-| isCompleted | boolean |
-| content     | string  |
-
-```jsx
-const [todos, setTodos] = useState([]);
-const [newTodo, setNewTodo] = useState("");
-
-const handleInputChange = (e) => {
-  setNewTodo(e.target.value); // 입력값을 상태로 저장
-};
-
-const handleKeyDown = (e) => {
-  if (e.key === "Enter") {
-    setTodos([
-      ...todos,
-      { id: Date.now(), content: newTodo, isCompleted: false },
-    ]); // 새로운 Todo 추가
-    setNewTodo(""); // 입력 필드 초기화
-  }
-};
-```
-
-사용자가 입력 필드에 할 일을 작성하고 Enter 키를 누르면 handleKeyDown 함수가 호출됩니다.
-id는 현재시간을 기준으로 추가되게 해주어 중복을 방지했습니다.
-setTodos를 사용하여 새로운 할 일을 기존의 todos 배열에 추가한 후 setNewTodo에 빈값을 넣어주어 입력 필드를 비웁니다.
-리액트는 상태 변경을 감지하고 컴포넌트를 자동으로 재렌더링하여 새로운 할 일이 화면에 표시됩니다.
-이 과정을 통해 할 일 추가, 상태 관리, UI 업데이트가 이루어집니다.
-바닐라 자바스크립트에서는 concat()을 사용해서 기존 배열을 변경하지 않고 새로운 배열을 반환했었는데 이번 리액트 앱에서는 스프레드 연산자를 사용했습니다. 구문이 더 간단하고, 배열뿐만 아니라 객체에도 사용할 수 있어 더 범용적이라는 생각이 들었습니다.
-
-3.  HTML에 추가된 할 일 그려주기
-
-- 순수 자바스크립트에서는 할일이 추가될 때마다 paintTodos()함수를 실행하여 렌더링 해주었는데 리액트에서는 jsx문법안에서 map으로 간단히 추가를 할 수가 있었습니다. 코드의 길이가 1/4이상 줄어드는것을 확인할 수 있었습니다.
-
-```jsx
-<ul className="todo-list">
-  {todos.map((todo) => (
-    <li className="todo-item" key={todo.id}>
-      <div className="checkbox"></div>
-      <div className="todo">{todo.content}</div>
-      <button className="delBtn">X</button>
-    </li> // 할 일 목록을 렌더링
-  ))}
-</ul>
-```
-
-## 할 일 목록에서 할 일 삭제
-
-삭제버튼을 클릭했을때 handleDeleteTodo함수에 todo의 id를 전달해주고 handleDeleteTodo에서는 그 id를 가지고 setTodos를 filter메소드를 사용하여 클릭하지 않은 리스트만 담겨지도록 렌더링 해주었습니다. 기존에 순수 자바스크립트만을 사용할 때에는 paintTodos() 라는 함수로 html을 그려주었는데 이 부분의 로직이 꽤나 길고 복잡했었습니다. 그런데 리액트에서는 상태관리를 통해 돔을 직접적으로 제어하지 않아도 변화된 요소만 렌더링 해주기 때문에 로직과 소스코드가 매우 가볍고 간단해진 것을 알 수 있습니다.
-
-```jsx
-const handleDeleteTodo = (todoId) => {
-  setTodos(todos.filter((todo) => todo.id !== todoId));
-};
-(...생략)
-
-<ul className="todo-list">
-  {todos.map((todo) => (
-    <li className="todo-item" key={todo.id}>
-      <div className="checkbox"></div>
-      <div className="todo">{todo.content}</div>
-      <button
-        className="delBtn"
-        onClick={() => handleDeleteTodo(todo.id)}
-      >
-        X
-      </button>
-    </li> // 할 일 목록을 렌더링
-  ))}
-</ul>
-```
-
-## 할 일 완료 처리
-
-완료 처리도 삭제 기능과 마찬가지로 onClick 이벤트 리스너 등록을 통해 처리해주면 됩니다.
-
-```js
-const handleCheckTodo = (todoId) => {
-    setTodos(
-      todos.map((todo) =>
-        todo.id === todoId ? { ...todo, isCompleted: !todo.isCompleted } : todo
-      )
-    );
-  };
-(...생략)
-
-{todos.map((todo) => (
-  <li
-    className={`todo-item ${todo.isCompleted ? "checked" : ""}`}
-    key={todo.id}
-  >
-    <div
-      className="checkbox"
-      onClick={() => handleCheckTodo(todo.id)}
-    >
-      {todo.isCompleted ? "✔" : ""}
-    </div>
-    <div className="todo">{todo.content}</div>
-    <button
-      className="delBtn"
-      onClick={() => handleDeleteTodo(todo.id)}
-    >
-      X
-    </button>
-  </li> // 할 일 목록을 렌더링
-))}
-```
-
-체크박스를 click하면 handleCheckTodo() 함수가 실행되며, 동작 방식은 삭제 기능과 거의 같습니다. 차이점은 삭제에서는 Array filter()를 사용해서 삭제하고자 하는 할 일을 제외한 배열을 만들었으면, 완료 처리는 Array map()을 사용하여 완료 처리를 하고자 하는 할 일의 isCompleted 값을 토글(true이면 false로, false면 true로) 처리하여 새로운 todos 배열을 저장합니다.
-
-## 할 일 수정하기
-
-1.  더블 클릭 시 수정 모드 전환
-
-- 수정모드의 로직을 설명하자면 수정 모드에서 할 일을 수정하는 상태를 관리하는 newTodo를 추가합니다. 다음 수정할 항목을 선택했을 때 해당 항목의 내용을 newTodo 상태에 반영합니다. 마지막으로 Enter 키를 누르면 해당 newTodo 값을 todos 배열에 반영하여 수정합니다.
-
-```jsx
-const [editingId, setEditingId] = useState(null); // 수정 중인 todo의 ID
-(...생략)
-
-// 할 일 수정 (수정 모드로 전환)
-const handleDoubleClick = (todoId, content) => {
-  setEditingId(todoId); // 수정하려는 todo의 ID를 설정
-  setNewTodo(content); // 해당 내용으로 입력창에 값을 설정
-};
-
-// 수정된 내용 저장
-const handleUpdateTodo = (e, todoId) => {
-  if (e.key === "Enter" && newTodo.trim() !== "") {
-    setTodos(
-      todos.map((todo) =>
-        todo.id === todoId ? { ...todo, content: newTodo } : todo
-      )
-    );
-    setNewTodo(""); // 입력창 초기화
-    setEditingId(null); // 수정 모드 종료
-  }
-};
-(...생략)
-
-{/* 수정 모드일 경우 입력 필드로 전환 */}
-{editingId === todo.id ? (
-  <input
-    className="edit-input"
-    value={newTodo}
-    onChange={handleInputChange}
-    onKeyDown={(e) => handleUpdateTodo(e, todo.id)} // 수정된 내용 저장
-    autoFocus
-  />
-) : (
-  <div
-    className="todo"
-    onDoubleClick={() => handleDoubleClick(todo.id, todo.content)}
-  >
-    {todo.content}
-  </div>
-)}
-```
-
-handleDoubleClick 함수는 더블클릭 시, 해당 todo의 content를 newTodo로 설정하고, 수정할 todo의 id를 editingId로 설정하여 수정 모드로 전환합니다.
-handleUpdateTodo 함수는 수정된 내용을 입력창에서 Enter 키를 누르면 todos 배열을 업데이트하여 해당 항목의 내용을 수정합니다.
-마지막으로 수정된 항목은 newTodo 상태로 관리되며, 사용자가 Enter 키를 눌렀을 때 수정된 내용으로 업데이트됩니다.
-
-## 전체 완료 처리, 남은 할 일 개수, 하단 필터링 버튼 기능 구현
-
-![Desktop View](./images/todo3.png){: width="700" height="400" }
-
-##
-
-투두리스트 상단의 전체 완료 처리와 하단의 필터 기능을 구현하겠습니다.
-
-1.  todos 전체 완료 처리
-
-- 전체 완료 처리 기능은 complete-all-btn 버튼 클릭 시 모든 할 일을 완료/미완료 상태로 바꾸는 기능으로 버튼을 클릭했을 때 todos 배열에 있는 모든 항목의 isCompleted 값을 반전시키는 로직입니다.
-
-```jsx
-// 전체 완료 처리
-const handleCompleteAll = () => {
-  const allCompleted = todos.every((todo) => todo.isCompleted);
-  setTodos(todos.map((todo) => ({ ...todo, isCompleted: !allCompleted })));
-};
-```
-
-2.  남은 할 일 개수 표시
-
-- 남은 할 일 개수는 완료되지 않은 할 일의 수를 계산하여 표시합니다. getLeftItemsCount 함수는 완료되지 않은 할 일의 개수를 계산하여 반환합니다. 이 값을 렌더링할 때 left-items 요소에 표시합니다.
-
-```jsx
-// 남은 할 일 개수
-const getLeftItemsCount = () =>
-  todos.filter((todo) => !todo.isCompleted).length;
-```
-
-3.  필터링 기능 (전체, 남은, 완료 된 할 일)
-
-- 사용자가 필터 버튼을 클릭했을 때, 각각의 조건에 맞는 할 일만 보여주는 기능입니다. currentShowType 상태를 사용하여 어떤 필터를 적용할지 결정합니다.
-
-```jsx
-// 필터 버튼 클릭 시 호출
-const handleShowTodosType = (type) => {
-  setCurrentShowType(type);
-};
-
-// 현재 필터 타입에 맞춰 할 일 렌더링
-const filteredTodos = todos.filter((todo) => {
-  switch (currentShowType) {
-    case "active":
-      return !todo.isCompleted;
-    case "completed":
-      return todo.isCompleted;
-    default:
-      return true;
-  }
+configure({
+  enforceActions: "always",
 });
+
+export interface Todo {
+  id: string;
+  title: string;
+  content: string;
+  isCompleted: boolean;
+}
+
+class TodoStore {
+  todos: Todo[] = [];
+  currentShowType: string = "all";
+
+  constructor() {
+    makeAutoObservable(this, {}, { autoBind: true });
+  }
+
+  // 생략...
+}
+
+const todoStore = new TodoStore();
+export default todoStore;
 ```
 
-4.  완료된 할 일 삭제
+## API 통신
 
-- clear-completed-btn 버튼 클릭 시 완료된 할 일을 모두 삭제하는 기능입니다.
+1. Axios + React Query
+   hooks/useTodoQueries.ts 파일에 Axios를 사용하여 API와 상호작용하는 훅을 작성했습니다. 이 훅에서는 할 일 목록을 가져오고, 추가하고, 수정하고, 삭제하는 기능을 수행합니다.
 
-```jsx
-// 완료된 할 일 삭제
-const handleClearCompletedTodos = () => {
-  setTodos(todos.filter((todo) => !todo.isCompleted));
-};
-```
+```ts
+import { v4 as uuidv4 } from "uuid";
+import axios from "axios";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import todoStore from "../store";
 
-## 리팩토링
+interface Todo {
+  id: string;
+  title: string;
+  content: string;
+  isCompleted: boolean;
+}
 
-기능적인 부분을 완료 후 리액트에 맞게 리팩토링을 진행했습니다.
+const BASE_URL = "http://localhost:5000";
+const TODOS_QUERY_KEY = ["todos"];
 
-1.  비동기 상태 업데이트 최적화 (prevTodos 활용)
-
-- 기존에는 setTodos([...todos, newTodo]) 형식으로 상태를 업데이트하였으나, 비동기 특성을 고려하여 prevTodos를 사용하도록 변경했습니다.
-
-```jsx
-const addTodo = (content) => {
-  setTodos((prevTodos) => [
-    ...prevTodos,
-    { id: Date.now(), content, isCompleted: false },
-  ]);
-};
-```
-
-2.  모든 할 일 완료/해제 시 prevTodos 적용
-
-- 모든 할 일의 완료 상태를 변경하는 함수에서 prevTodos를 사용하여 비동기 업데이트 문제를 해결했습니다.
-
-```jsx
-const handleCompleteAll = () => {
-  setTodos((prevTodos) => {
-    const allCompleted = prevTodos.every((todo) => todo.isCompleted);
-    return prevTodos.map((todo) => ({ ...todo, isCompleted: !allCompleted }));
+export function useFetchTodos() {
+  return useQuery<Todo[]>({
+    queryKey: TODOS_QUERY_KEY,
+    queryFn: async () => {
+      const response = await axios.get(`${BASE_URL}/todos`);
+      todoStore.setTodos(response.data);
+      return response.data;
+    },
   });
-};
-```
+}
 
-3.  useMemo 활용하여 불필요한 연산 줄이기
-
-- 필터링된 목록을 매번 계산하는 대신, useMemo를 사용하여 필요할 때만 연산되도록 변경했습니다
-
-```jsx
-const filteredTodos = useMemo(() => {
-  return todos.filter((todo) => {
-    switch (currentShowType) {
-      case "active":
-        return !todo.isCompleted;
-      case "completed":
-        return todo.isCompleted;
-      default:
-        return true;
-    }
+export function useAddTodo() {
+  const queryClient = useQueryClient();
+  return useMutation<Todo, Error, { title: string; content: string }>({
+    mutationFn: async ({
+      title,
+      content,
+    }: {
+      title: string;
+      content: string;
+    }) => {
+      const newTodo: Todo = {
+        id: uuidv4(),
+        title,
+        content,
+        isCompleted: false,
+      };
+      await axios.post(`${BASE_URL}/todos`, newTodo);
+      return newTodo;
+    },
+    onSuccess: (newTodo: Todo) => {
+      todoStore.addTodo(newTodo);
+      queryClient.invalidateQueries({ queryKey: TODOS_QUERY_KEY });
+    },
   });
-}, [todos, currentShowType]);
+}
+
+// 생략...
 ```
 
-4.  불필요한 함수 재생성 방지 (useCallback 적용)
+## 컴포넌트 구현
 
-- 핸들러 함수들을 useCallback을 사용하여 메모이제이션 처리하였습니다.
+1. Main 컴포넌트
+   애플리케이션의 주요 컴포넌트를 기능별로 나눠 작성했습니다. Main.tsx 파일에서 로딩 상태를 처리하고, 주요 각 컴포넌트를 연결했습니다. 위에서 말씀드린 바와 같이 observer로 컴포넌트를 감싼 것을 볼 수 있습니다. TodoInput, TodoList, TodoFilter 컴포넌트는 각각 할 일 추가, 목록 표시 및 필터링 기능을 구현했습니다. 이 컴포넌트들은 Prop을 통해 부모 컴포넌트와 연결되어, 상태 관리와 UI 업데이트를 처리가능하도록 했습니다.
 
-```jsx
-const handleDeleteTodo = useCallback((todoId) => {
-  setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== todoId));
-}, []);
+```tsx
+import { observer } from "mobx-react-lite";
+import TodoInput from "./TodoInput";
+import TodoList from "./TodoList";
+import TodoFilter from "./TodoFilter";
+import todoStore from "../store";
+import {
+  useFetchTodos,
+  useAddTodo,
+  useEditTodo,
+  useCompleteAll,
+  useCheckTodo,
+  useDeleteTodo,
+  useClearCompletedTodos,
+} from "../hooks/useTodoQueries";
+
+const Main = observer(() => {
+  const { isLoading } = useFetchTodos();
+  const addTodoMutation = useAddTodo();
+  const editTodoMutation = useEditTodo();
+  const completeAllMutation = useCompleteAll();
+  const checkTodoMutation = useCheckTodo();
+  const deleteTodoMutation = useDeleteTodo();
+  const clearCompletedTodosMutation = useClearCompletedTodos();
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <main className="todo-box">
+      <button onClick={() => completeAllMutation.mutate()}>✔</button>
+      <TodoInput
+        addTodo={(content) =>
+          addTodoMutation.mutate({ title: content, content })
+        }
+      />
+      <TodoList
+        handleCheckTodo={(id) => checkTodoMutation.mutate(id)}
+        handleDeleteTodo={(id) => deleteTodoMutation.mutate(id)}
+        filteredTodos={todoStore.filteredTodos}
+        handleEditTodo={(id, content) =>
+          editTodoMutation.mutate({ todoId: id, newContent: content })
+        }
+      />
+      <TodoFilter
+        leftItemsCount={todoStore.leftItemsCount}
+        handleShowTodosType={todoStore.setCurrentShowType}
+        handleClearCompletedTodos={() => clearCompletedTodosMutation.mutate()}
+        currentShowType={todoStore.currentShowType}
+      />
+    </main>
+  );
+});
+
+export default Main;
 ```
+
+## 문제 해결 과정
+
+1. 데이터 로딩 문제
+   처음에 API에서 데이터를 가져오는 데 시간이 걸려 사용자 경험이 저하되었습니다. 이를 해결하기 위해 로딩 상태를 추가하고, 로딩 중에는 "Loading..." 메시지를 표시했습니다.
+
+2. API 에러 처리
+   API 호출 중 에러가 발생할 때, 사용자에게 에러 메시지를 표시하도록 기능을 추가했습니다. 각 훅에서 onError 콜백을 통해 에러를 처리하고, 사용자에게 에러 정보를 제공하는 메시지를 추가했습니다.
+
+3. 러닝커브
+   [MobX](https://mobx.js.org/README.html)를 사용하면서 쉽지는 않았습니다. 동작 원리를 이해하고 작성해보고 적용해나가기까지 거북목으로 써보았습니다. 지금도 수정하고 리팩토링해야할 부분이 많지만 한번에 만족하기보다 이후에 차차로 리팩토링 해나가며 심도있게 학습할할 예정입니다.
+
+## 바닐라 자바스크립트와 리액트
 
 | 비교 항목   | 바닐라 자바스크립트                                             | 리액트                                        |
 | ----------- | --------------------------------------------------------------- | --------------------------------------------- |
@@ -673,12 +257,14 @@ const handleDeleteTodo = useCallback((todoId) => {
 
 1.  리액트의 상태 관리는 확실히 편리하다는 점입니다. useState 하나로 DOM을 직접 조작하는 과정 없이 깔끔하게 상태 변경이 가능한 것이 편리했습니다.
 
-2.  useMemo, useCallback 등을 활용하면 렌더링 성능을 최적화할 수 있고 이를 활용하여 불필요한 연산과 렌더링을 줄일 수 있었다는 점 입니다.
+2.  useMemo, useCallback 등을 활용하면 렌더링 성능을 최적화할 수 있고 이를 활용하여 불필요한 연산과 렌더링을 줄여 최적화 할수 있는 이점이 있습니다.
 
-3.  바닐라 자바스크립트는 이벤트 핸들러를 직접 관리하면서 DOM을 조작해야 했고 소스가 다소 복잡하고 지저분해 보였지만, 리액트는 컴포넌트 기반으로 코드가 깔끔하게 유지되었다는 점입니다.
+3.  물론 최적화가 자동으로 이루어지는 MobX라는 라이브러리를 사용할 수도 있습니다.
 
-4.  다만 단점으로는 리액트는 처음 배우기 어렵다는 점이 있었습니다. 바닐라 자바스크립트에서는 단순한 querySelector나 addEventListener로 가능했던 작업도, 리액트에서는 useState, useEffect, useMemo 등을 학습하고 고려해야 해서 학습 난이도가 있다는 점을 느꼈습니다.
+4.  이 외에도 많은 라이브러리와 래퍼런스가 많은 생태계가 넓은 프레임워크라는 점을 다시 한번 느꼈습니다.
 
-이번 프로젝트를 통해 바닐라 자바스크립트와 리액트의 차이를 체감할 수 있었고, 리액트의 컴포넌트 기반 아키텍처와 상태 관리의 강력함을 다시금 느낄 수 있었습니다. 또한 습관적으로 쓰던 hook들에 대해 다시 한번 생각할 수 있게되어 좋은 과정이 되었습니다.
+5.  다만 단점으로는 리액트는 처음에는 러닝커브가 있다는 점입니다. 그 예로 MobX, Redux, NextJS 등 작동 원리와 코드 작성 방식 등을 고려하고 이래하고 익혀야 한다는 알면 알수록 학습적인 프레임워크라는 점을 느꼈습니다.
+
+이번 프로젝트를 통해 바닐라 자바스크립트와 리액트의 차이를 체감할 수 있었고, 리액트의 컴포넌트 기반 아키텍처와 상태 관리의 강력함을 다시금 느낄 수 있었습니다.
 
 전체 소스코드는 [TodosReact-github-jeongeun](https://github.com/frontend-leejeongeun/Project-Todos-React) 여기서 볼 수 있습니다.
