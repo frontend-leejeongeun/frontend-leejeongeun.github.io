@@ -2,6 +2,21 @@
 투두리스트의 동작방식은 [TodoMVC](https://todomvc.com/examples/javascript-es6/dist/)와 같이 동작하도록 개발하였으며, 다음과 같은 형태입니다. 기존의 바닐라 자바스크립트와 동일한 UI,기능을 유지하도록 의도하였으며 소스코드만 다르게 작성되었습니다. 이 과정을 통해 순수자바스크립트와 리액트 프레임워크 사용시 차이점과 장단점을 좀 더 직관적으로 체감할 수 있을 것으로 기대합니다.
 이 리액트 앱의 전체 소스코드는 [TodosReact-github-jeongeun](https://github.com/frontend-leejeongeun/Project-Todos-React) 여기서 볼 수 있습니다.
 
+아래 작성내용은 초기 프로토타입 버전의 작성버전입니다.
+
+현재는 리팩토링을 거쳐 아래의 기술스택을 사용하여 코드를 업데이트하였습니다.
+
+React: 사용자 인터페이스 구축 및 상태 관리
+Vite: 빠른 개발 환경 설정 도구
+TypeScript: 정적 타입을 제공하는 자바스크립트 상위 언어
+MobX: 상태 관리 라이브러리
+TanStack Query: 서버 상태 관리 라이브러리
+Axios: HTTP 클라이언트
+Json server: 간단한 REST API 서버 제공 (로컬)
+CSS: 애플리케이션 스타일링
+
+이에 따른 내용은 차근히 작성 예정입니다.
+
 ![Desktop View](./images/todo1.png)
 
 ## 기능 정의하기
@@ -102,312 +117,180 @@ function App() {
 export default App;
 ```
 
-```css
-/* http://meyerweb.com/eric/tools/css/reset/ 
-   v2.0 | 20110126
-   License: none (public domain)
-*/
-
-html,
-body,
-div,
-span,
-applet,
-object,
-iframe,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p,
-blockquote,
-pre,
-a,
-abbr,
-acronym,
-address,
-big,
-cite,
-code,
-del,
-dfn,
-em,
-img,
-ins,
-kbd,
-q,
-s,
-samp,
-small,
-strike,
-strong,
-sub,
-sup,
-tt,
-var,
-b,
-u,
-i,
-center,
-dl,
-dt,
-dd,
-ol,
-ul,
-li,
-fieldset,
-form,
-label,
-legend,
-table,
-caption,
-tbody,
-tfoot,
-thead,
-tr,
-th,
-td,
-article,
-aside,
-canvas,
-details,
-embed,
-figure,
-figcaption,
-footer,
-header,
-hgroup,
-menu,
-nav,
-output,
-ruby,
-section,
-summary,
-time,
-mark,
-audio,
-video {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  font-size: 100%;
-  font: inherit;
-  vertical-align: baseline;
-}
-/* HTML5 display-role reset for older browsers */
-article,
-aside,
-details,
-figcaption,
-figure,
-footer,
-header,
-hgroup,
-menu,
-nav,
-section {
-  display: block;
-}
-body {
-  line-height: 1;
-}
-ol,
-ul {
-  list-style: none;
-}
-blockquote,
-q {
-  quotes: none;
-}
-blockquote:before,
-blockquote:after,
-q:before,
-q:after {
-  content: "";
-  content: none;
-}
-table {
-  border-collapse: collapse;
-  border-spacing: 0;
-}
-```
-
-```css
 html {
-  height: 100%;
+height: 100%;
 }
 
 body {
-  display: flex;
-  flex-wrap: nowrap;
-  justify-content: center;
-  background-color: #f5f5f5;
-  min-height: 100%;
+display: flex;
+flex-wrap: nowrap;
+justify-content: center;
+background-color: #f5f5f5;
+min-height: 100%;
 }
 
 .todo-wrapper {
-  justify-content: center;
-  margin-top: 3rem;
-  min-width: 600px;
+justify-content: center;
+margin-top: 3rem;
+min-width: 600px;
 }
 
 .todo-title {
-  padding: 2rem;
-  text-align: center;
-  color: rosybrown;
-  font-size: 5rem;
+padding: 2rem;
+text-align: center;
+color: rosybrown;
+font-size: 5rem;
 }
 
 .todo-box {
-  background-color: white;
-  border: 1px solid #ddd;
+background-color: white;
+border: 1px solid #ddd;
 }
 
 .todo-input-box {
-  display: flex;
-  flex-wrap: nowrap;
-  flex-direction: row;
-  height: 3rem;
-  border-bottom: 1px solid #ddd;
-  justify-content: flex-start;
-  align-items: center;
+display: flex;
+flex-wrap: nowrap;
+flex-direction: row;
+height: 3rem;
+border-bottom: 1px solid #ddd;
+justify-content: flex-start;
+align-items: center;
 }
 
 button {
-  background-color: transparent;
-  border: 0;
+background-color: transparent;
+border: 0;
 }
 
 .complete-all-btn {
-  color: gray;
-  min-width: none;
-  min-height: none;
-  width: 1.5rem;
-  height: 1.5rem;
-  margin: 0.5rem 0.5rem;
-  border-radius: 50px;
-  cursor: pointer;
-  font-size: 1.2rem;
+color: gray;
+min-width: none;
+min-height: none;
+width: 1.5rem;
+height: 1.5rem;
+margin: 0.5rem 0.5rem;
+border-radius: 50px;
+cursor: pointer;
+font-size: 1.2rem;
 }
 
 .complete-all-btn.checked {
-  color: green;
+color: green;
 }
 
 .todo-input {
-  width: 80%;
-  text-align: center;
-  border: 0;
-  outline: none;
-  font-size: 1.3rem;
+width: 80%;
+text-align: center;
+border: 0;
+outline: none;
+font-size: 1.3rem;
 }
 
 .todo-item {
-  position: relative;
-  display: flex;
-  flex-wrap: nowrap;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  height: 3rem;
-  border-bottom: 1px solid #ddd;
+position: relative;
+display: flex;
+flex-wrap: nowrap;
+flex-direction: row;
+justify-content: space-between;
+align-items: center;
+height: 3rem;
+border-bottom: 1px solid #ddd;
 }
 
 .todo-item:hover .delBtn {
-  opacity: 1;
+opacity: 1;
 }
 
 .checkbox {
-  min-width: none;
-  min-height: none;
-  width: 1.5rem;
-  height: 1.5rem;
-  margin: 0.5rem 0.5rem;
-  border-radius: 50px;
-  border: 1px solid lightgray;
-  cursor: pointer;
-  text-align: center;
+min-width: none;
+min-height: none;
+width: 1.5rem;
+height: 1.5rem;
+margin: 0.5rem 0.5rem;
+border-radius: 50px;
+border: 1px solid lightgray;
+cursor: pointer;
+text-align: center;
 }
 
 .todo-item.checked .checkbox {
-  border: 2px solid darkgray;
-  color: green;
+border: 2px solid darkgray;
+color: green;
 }
 
 .todo {
-  font-size: 1.3rem;
-  padding: 0 1rem;
-  width: 80%;
+font-size: 1.3rem;
+padding: 0 1rem;
+width: 80%;
 }
 
 .todo-item.checked .todo {
-  font-style: italic;
-  text-decoration: line-through;
-  color: lightgray;
+font-style: italic;
+text-decoration: line-through;
+color: lightgray;
 }
 
 .delBtn {
-  opacity: 1;
-  width: 3rem;
-  height: 3rem;
-  font-size: 1.5rem;
-  font-weight: lighter;
-  cursor: pointer;
+opacity: 1;
+width: 3rem;
+height: 3rem;
+font-size: 1.5rem;
+font-weight: lighter;
+cursor: pointer;
 }
 
 .todo-bottom {
-  height: 3rem;
-  display: flex;
-  flex-wrap: nowrap;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 1rem;
+height: 3rem;
+display: flex;
+flex-wrap: nowrap;
+flex-direction: row;
+justify-content: space-between;
+align-items: center;
+padding: 0 1rem;
 }
 
 .button-group {
-  flex-direction: row;
-  flex-wrap: nowrap;
+flex-direction: row;
+flex-wrap: nowrap;
 }
 
 .button-group button {
-  border: 1px solid #eee;
-  padding: 0.2rem 0.5rem;
-  margin: 0 0.5rem;
-  border-radius: 8px;
-  cursor: pointer;
+border: 1px solid #eee;
+padding: 0.2rem 0.5rem;
+margin: 0 0.5rem;
+border-radius: 8px;
+cursor: pointer;
 }
 
 .button-group button.selected {
-  border: 2px solid rosybrown;
-  padding: 0.2rem 0.5rem;
-  margin: 0 0.5rem;
-  border-radius: 8px;
+border: 2px solid rosybrown;
+padding: 0.2rem 0.5rem;
+margin: 0 0.5rem;
+border-radius: 8px;
 }
 
 .clear-completed-btn:hover {
-  font-style: italic;
-  text-decoration: underline;
-  cursor: pointer;
+font-style: italic;
+text-decoration: underline;
+cursor: pointer;
 }
 
 .edit-input {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 590px;
-  height: 2.8rem;
-  margin: 0;
+position: absolute;
+left: 0;
+top: 0;
+width: 590px;
+height: 2.8rem;
+margin: 0;
 }
 
 .info {
-  margin-top: 1.5rem;
-  text-align: center;
-  color: #ccc;
+margin-top: 1.5rem;
+text-align: center;
+color: #ccc;
 }
-```
+
+````
 
 ## 할 일 추가하기
 
@@ -484,7 +367,7 @@ function App() {
 }
 
 export default App;
-```
+````
 
 2.  할 일 추가하기
 
