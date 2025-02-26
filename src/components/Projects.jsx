@@ -14,7 +14,7 @@ export default function Projects({ projectRef }) {
                   To Do List - Vanilla Javascript
                 </Link>
               </h3>
-              <p>
+              <div>
                 <div className="text-block">
                   <span className="title">프로젝트 :</span>
                   <span className="des">
@@ -36,7 +36,7 @@ export default function Projects({ projectRef }) {
                     각 상태 별 필터링, 남은 할일 카운트, 기능에 부합하는 UI 구현
                   </span>
                 </div>
-              </p>
+              </div>
               <div className="project-view-btn">
                 <Link to="/todovanilla" target="_blank">
                   view project post
@@ -61,7 +61,7 @@ export default function Projects({ projectRef }) {
                   To Do List - React
                 </Link>
               </h3>
-              <p>
+              <div>
                 <div className="text-block">
                   <span className="title">프로젝트 :</span>
                   <span className="des">리액트로 만든 할 일 목록</span>
@@ -83,7 +83,7 @@ export default function Projects({ projectRef }) {
                     각 상태 별 필터링, 남은 할일 카운트, 기능에 부합하는 UI 구현
                   </span>
                 </div>
-              </p>
+              </div>
               <div className="project-view-btn">
                 <Link to="/TodoReact" target="_blank">
                   view project post
