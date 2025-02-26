@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 
-export default function Projects() {
+export default function Projects({ projectRef }) {
   return (
-    <div id="projects" className="background-alt">
+    <div id="projects" className="background-alt" ref={projectRef}>
       <h2 className="heading">Projects</h2>
       <div className="container">
         <div className="row">
@@ -69,7 +69,7 @@ export default function Projects() {
                 <div className="text-block">
                   <span className="title">기술스택 :</span>
                   <span className="des">
-                    react, javascript, jsx, css, javascript
+                    react, javascript, typescript, tsx, css
                   </span>
                 </div>
                 <div className="text-block">

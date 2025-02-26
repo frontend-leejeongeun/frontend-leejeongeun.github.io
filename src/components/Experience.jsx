@@ -1,6 +1,6 @@
-export default function Experience() {
+export default function Experience({ experienceRef }) {
   return (
-    <div id="experience" className="background-alt">
+    <div id="experience" className="background-alt" ref={experienceRef}>
       <h2 className="heading">Experience</h2>
       <div id="experience-timeline">
         <div className="vtimeline-point">

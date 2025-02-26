@@ -1,23 +1,20 @@
 import { Link } from "react-router-dom";
 
-export default function Header() {
+export default function Header({
+  handleScroll,
+  projectRef,
+  skillRef,
+  experienceRef,
+}) {
   return (
     <header className="sticky shadow">
       <ul id="menu">
         <li>
-          <Link to="/" target="_blank">
-            Home
-          </Link>
+          <Link to="/">Home</Link>
         </li>
-        <li>
-          <a href="#projects">Projects</a>
-        </li>
-        <li>
-          <a href="#skills">Skills</a>
-        </li>
-        <li>
-          <a href="#experience">Experience</a>
-        </li>
+        <li onClick={() => handleScroll(projectRef)}>Projects</li>
+        <li onClick={() => handleScroll(skillRef)}>Skills</li>
+        <li onClick={() => handleScroll(experienceRef)}>Experience</li>
       </ul>
       <ul className="social">
         <li>

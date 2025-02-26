@@ -1,6 +1,6 @@
-export default function Skills() {
+export default function Skills({ skillRef }) {
   return (
-    <div id="skills">
+    <div id="skills" ref={skillRef}>
       <h2 className="heading">Skills</h2>
       <ul>
         <li>JavaScript</li>
@@ -8,7 +8,10 @@ export default function Skills() {
         <li>Html</li>
         <li>Css</li>
         <li>Sass</li>
+        <li>Post css</li>
+        <li>Tailwind css</li>
         <li>React</li>
+        <li>MobX</li>
         <li>Vue</li>
         <li>Next.js</li>
         <li>Node.js</li>

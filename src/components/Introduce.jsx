@@ -1,18 +1,8 @@
-import React, { useRef } from "react";
-export default function Introduce() {
-  // useRef로 #introduce와 #introduce-down을 참조
-  const introduceRef = useRef(null);
-  const introduceDownRef = useRef(null);
-
-  const handleScrollDown = () => {
-    if (introduceRef.current) {
-      // introduce 다음 섹션으로 스크롤
-      const nextSection = introduceRef.current.nextElementSibling;
-      if (nextSection) {
-        nextSection.scrollIntoView({ behavior: "smooth" });
-      }
-    }
-  };
+export default function Introduce({
+  handleScrollDown,
+  introduceRef,
+  introduceDownRef,
+}) {
   return (
     <div id="introduce" ref={introduceRef}>
       <div id="introduce-content">
@@ -26,7 +16,7 @@ export default function Introduce() {
       <div
         id="introduce-down"
         ref={introduceDownRef}
-        onClick={handleScrollDown}
+        onClick={() => handleScrollDown(introduceRef)}
       >
         <span>
           <svg
