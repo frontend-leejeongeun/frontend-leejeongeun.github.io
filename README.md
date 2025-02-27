@@ -5,7 +5,6 @@
 ## 📌 프로젝트 소개
 
 이 프로젝트는 React와 Javascript, Tailwind CSS를 활용하여 제작한 개인 포트폴리오 웹사이트입니다.
-프론트엔드 개발자로서의 역량을 보여주기 위해 다양한 기술을 적용하였습니다.
 
 ## 🔗 배포 링크
 
@@ -15,8 +14,9 @@
 
 ## 🛠 사용 기술
 
-- **프레임워크 & 라이브러리**: React, React Router
-- **스타일링**: Tailwind CSS
+- **프레임워크**: React
+- **라이브러리**: React Router, react-markdown, remark-gfm
+- **스타일링**: Tailwind css, github-markdown-css
 - **배포**: GitHub Pages
 
 ---
@@ -76,11 +76,10 @@ npm start
 
 ## 🎨 주요 기능
 
-- **반응형 디자인**: Tailwind CSS를 활용한 모바일/데스크톱 대응
+- **반응형 디자인**: 모바일/데스크톱 대응
 - **라우팅 시스템**: React Router로 페이지 이동 구현
 - **프로젝트 소개**: 개인 프로젝트 및 개발 경험 정리
-- **연락처 페이지**: 폼을 통해 이메일 문의 가능
-- **GitHub Pages 배포**: 정적 웹사이트로 쉽게 배포 가능
+- **GitHub Pages 배포**: 정적 웹사이트 배포
 
 ---
 
@@ -89,7 +88,3 @@ npm start
 - 프로젝트 추가에 따른 추가 포스팅 업데이트 🔍
 
 ---
-
-## 📝 라이선스
-
-이 프로젝트는 MIT 라이선스를 따릅니다.
