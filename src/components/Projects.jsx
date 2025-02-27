@@ -1,4 +1,6 @@
 import { Link } from "react-router-dom";
+import imgTodoVanilla from "../assets/images/project1.png";
+import imgTodoReact from "../assets/images/project2.png";
 
 export default function Projects({ projectRef }) {
   return (
@@ -7,14 +9,20 @@ export default function Projects({ projectRef }) {
       <div className="container">
         <div className="row">
           <div className="project shadow-large">
-            <div className="project-image todovanilla"></div>
+            <Link to="/todovanilla" target="_blank">
+              <div className="project-image todovanilla">
+                <figure>
+                  <img src={imgTodoVanilla} alt="project1" />
+                </figure>
+              </div>
+            </Link>
             <div className="project-info">
               <h3>
                 <Link to="/todovanilla" target="_blank">
                   To Do List - Vanilla Javascript
                 </Link>
               </h3>
-              <div>
+              <div className="text-wrapper">
                 <div className="text-block">
                   <span className="title">프로젝트 :</span>
                   <span className="des">
@@ -54,14 +62,20 @@ export default function Projects({ projectRef }) {
           </div>
 
           <div className="project shadow-large">
-            <div className="project-image todoreact"></div>
+            <Link to="/TodoReact" target="_blank">
+              <div className="project-image todoreact">
+                <figure>
+                  <img src={imgTodoReact} alt="project2" />
+                </figure>
+              </div>
+            </Link>
             <div className="project-info">
               <h3>
                 <Link to="/TodoReact" target="_blank">
                   To Do List - React
                 </Link>
               </h3>
-              <div>
+              <div className="text-wrapper">
                 <div className="text-block">
                   <span className="title">프로젝트 :</span>
                   <span className="des">리액트로 만든 할 일 목록</span>
