@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import imgTodoVanilla from "../assets/images/project1.png";
 import imgTodoReact from "../assets/images/project2.png";
+import imgCommunity from "../assets/images/project3.png";
 
 export default function Projects({ projectRef }) {
   return (
@@ -8,6 +9,59 @@ export default function Projects({ projectRef }) {
       <h2 className="heading">Projects</h2>
       <div className="container">
         <div className="row">
+
+        <div className="project shadow-large">
+            <Link to="/community" target="_blank">
+              <div className="project-image todovanilla">
+                <figure>
+                  <img src={imgCommunity} alt="project3" />
+                </figure>
+              </div>
+            </Link>
+            <div className="project-info">
+              <h3>
+                <Link to="/community" target="_blank">
+                  Community - NextJs
+                </Link>
+              </h3>
+              <div className="text-wrapper">
+                <div className="text-block">
+                  <span className="title">프로젝트 :</span>
+                  <span className="des">
+                    nextJs와 Firebase 로 만드는 커뮤니티
+                  </span>
+                </div>
+                <div className="text-block">
+                  <span className="title">기술스택 :</span>
+                  <span className="des">nextJs, Firebase, html, tailwind css, typescript, javascript</span>
+                </div>
+                <div className="text-block">
+                  <span className="title">기여도 :</span>
+                  <span className="des">100%</span>
+                </div>
+                <div className="text-block">
+                  <span className="title">기능정의 :</span>
+                  <span className="des">
+                    회원가입 & 로그인, 게시판, 댓글 시스템, 게시글 검색 기능 등
+                  </span>
+                </div>
+              </div>
+              <div className="project-view-btn">
+                <Link to="/community" target="_blank">
+                  view project post
+                </Link>
+              </div>
+              <div className="project-view-btn">
+                <Link
+                  to="https://github.com/frontend-leejeongeun/Project-Community-Next"
+                  target="_blank"
+                >
+                  go to repository
+                </Link>
+              </div>
+            </div>
+          </div>
+
           <div className="project shadow-large">
             <Link to="/todovanilla" target="_blank">
               <div className="project-image todovanilla">
@@ -113,6 +167,7 @@ export default function Projects({ projectRef }) {
               </div>
             </div>
           </div>
+
         </div>
       </div>
     </div>
