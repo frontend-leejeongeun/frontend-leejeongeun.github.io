@@ -1,137 +1,133 @@
-Firebase를 활용하여 커뮤니티 플랫폼을 개발중에 있습니다. 현재까지 로그인 및 로그아웃 기능을 구현하였으며, GitHub 및 Google OAuth 로그인을 지원합니다. 개발 과정에서 발생한 문제를 해결하고, Firebase의 인증 시스템을 활용하여 사용자 인증을 관리하는 방법을 익히고있는데 특히 회원 관리부터 로그인 상태 유지, 오류 처리까지 직접 경험하며 백엔드와 프론트엔드의 연결 방식에 대한 이해도를 높이고 있습니다.
-이 리액트 앱의 전체 소스코드는 [Community-github-jeongeun](https://github.com/frontend-leejeongeun/Project-Community-Next) 여기서 볼 수 있습니다. 다만, 25년 3월9일 저녁 9시 기준으로 프로젝트 시작 및 포스팅 병행 중에 있습니다.
+Firebase와 Next.js를 활용한 커뮤니티 플랫폼 개발 과정을 정리한 글입니다. 글 작성, 수정, 삭제, 댓글기능과 게시글 검색 및 하이라이팅 기능 그리고 로그인과 회원가입 인증을 지원합니다. GitHub 및 Google OAuth 로그인도 지원하고 익명기능도 제공합니다. 이 포스팅은 단순한 기능 구현을 넘어서 클라이언트와 백엔드의 구현, 실제 서비스 배포와 실시간 트러블슈팅을 경험하며 그 과정에서 겪은 고민과 시행착오를 담고 있습니다. 이 앱의 클라이언트 전체 소스코드는 [Community-front](https://github.com/frontend-leejeongeun/Project-Community-Next-Client) 여기서 볼 수 있습니다. 백엔드 전체 소스코드는 [Community-back](https://github.com/frontend-leejeongeun/Project-Community-Next-Server) 이곳에서 볼 수 있습니다.
+
+## 구현 기능
+
+- 로그인 인증
+- 이메일 회원가입
+- 글 작성, 수정, 삭제, 읽기
+- 댓글, 대댓글 기능
+- 게시글 검색, 하이라이팅 기능
 
 ## 기술 스택
 
 - Next.js: 프론트엔드 프레임워크
-- Firebase Authentication: OAuth 로그인 및 이메일/비밀번호 인증 관리
-- TypeScript: 정적 타입을 제공하는 자바스크립트 상위 언어
-- Tailwind CSS: 스타일링 및 반응형 UI 구현
-- 이후 기술 스택 추가 예정
+- Firebase Authentication: OAuth 로그인, 이메일 인증
+- Firebase Firestore: NoSQL 실시간 데이터베이스
+- TypeScript: 정적 타입 적용
+- Tailwind CSS: 빠른 UI 구성
+- Node.js + Express: 백엔드 API 서버
+- Fly.io: 백엔드 배포 플랫폼
+- Vercel: 프론트엔드 배포 플랫폼
 
-## 현재까지 구현된 기능
+![Desktop View](./images/community1.PNG)
+![Desktop View](./images/community2.PNG)
 
-![Desktop View](./images/community1.png)
+## 1단계: 로그인 구현과 인증 시스템 이해
 
-1.  로그인 및 로그아웃 기능
+#### 로그인 및 로그아웃 기능
 
-- ###### Firebase Authentication을 이용하여 로그인 및 로그아웃 구현
-- ###### Google 로그인, GitHub 로그인, 이메일/비밀번호 로그인 지원
-- ###### 로그인 상태를 유지하고, 로그인한 사용자만 특정 페이지에 접근 가능하도록 설정
+### 작업 중 느낀 점
 
-2.  로그인 상태 유지 및 페이지 접근 제한
+- ###### 단순히 로그인 기능을 구현하는 것과, 인증 상태에 따라 UX를 세심하게 설계하는 것은 별개의 일.
+- ###### Firebase의 기본 제공 기능은 강력하지만, 실제 앱과 연결할 때는 다양한 예외처리(에러, 충돌, 리디렉션 등)가 필요함.
 
-- ###### Firebase Authentication의 onAuthStateChanged를 활용하여 사용자의 로그인 상태를 추적
-- ###### 로그인 여부에 따라 특정 페이지로 이동하거나 접근을 제한하는 기능 구현
+## 2단계: Firestore 직접 접근의 한계와 API 서버 도입
 
-## 개발 중 발생한 문제 및 해결 과정
-
-### 1. 프론트엔드에서 Firestore 데이터를 직접 호출하는 문제 (getDocs 사용)
+#### 처음에는 getDocs로 Firestore 데이터를 직접 호출했지만, 이 방식은 보안상 위험하고 유지보수도 어려웠습니다.
 
 ```ts
-import { GoogleAuthProvider, signInWithPopup, GithubAuthProvider, signInWithEmailAndPassword, onAuthStateChanged, signOut, User } from "firebase/auth";
-import { auth,db } from "@/services/firebase";
-import { collection, getDocs } from "firebase/firestore";
+const querySnapshot = await getDocs(collection(db, "posts"));
+setPosts(querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+```
 
-export default function Home() {
-    const router = useRouter();
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [error, setError] = useState("");
-    const [posts, setPosts] = useState<{ id: string; [key: string]: any }[]>([]);
-    const [userInfo, setUserInfo] = useState<User | null>(null);
+### 문제점
 
-    useEffect(() => {
-        const fetchPosts = async () => {
-          const querySnapshot = await getDocs(collection(db, "posts"));
-          setPosts(querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
-        };
+- ###### 프론트엔드에 비즈니스 로직이 몰림
+- ###### 모든 데이터를 가져오므로 성능 저하 가능성
+- ###### Firestore 권한 관리를 프론트에서 해야 하므로 보안 취약
 
-        fetchPosts();
-      }, []);
+### 해결: Node.js + Express 백엔드 API 서버 구축
 
-    useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
-            if (user) {
-              setIsLoggedIn(true);
-              setUserInfo(user)
-            } else {
-                setIsLoggedIn(false);
-            }
-        });
+#### Firebase Admin SDK를 활용해 백엔드 서버에서 Firestore에 접근하고, 필요한 데이터만 JSON으로 응답하도록 설계했습니다
 
-        return () => unsubscribe();
-    }, []);
+###### 예시: 게시글 목록 GET API
 
+```js
+app.get("/api/posts", async (req, res) => {
+  const postsRef = db.collection("posts");
+  const snapshot = await postsRef.get();
+  const posts = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+  res.json(posts);
+});
+```
 
-  // 생략...
+## 3단계: GitHub 로그인 충돌 에러 해결
 
-    return (
-       <div className="flex flex-col min-h-screen">
-            <Header />
-            <main className="flex flex-grow w-full max-w-screen-xl mx-auto">
-                {isLoggedIn ? (
-                    <div className="flex w-full">
-                        <div className="w-1/6 p-4 border-r border-gray-200">채팅창</div>
-                        <div className="w-2/3 p-4">
-                            <ul>
-                                {posts.map((post) => (
-                                <li key={post.id}>
-                                    <h2>{post.title}</h2>
-                                    <p>{post.content}</p>
-                                </li>
-                                ))}
-                            </ul>
-                        </div>
-              <div className="w-1/6 p-4 border-l border-gray-200">
-                  {userInfo && <p>{userInfo.displayName}님 안녕하세요!</p>}
-                            <button
-                                onClick={logout}
-                                className="bg-red-500 text-white px-4 py-2 rounded-md mt-4"
-                            >
-                                로그아웃
-                            </button>
-                        </div>
-                    </div>
-                ) : (
-                    <div className="flex w-full">
- // 생략...
-    )
+#### 같은 이메일로 Google과 GitHub 로그인을 시도할 때 auth/account-exists-with-different-credential 오류가 발생.
+
+### 해결
+
+```ts
+const methods = await fetchSignInMethodsForEmail(email);
+if (methods.includes("google.com")) {
+  alert("Google 로그인으로 가입된 이메일입니다. Google로 로그인해주세요.");
 }
 ```
 
-- 현재 프론트엔드에서 Firestore의 getDocs를 직접 호출하여 데이터를 가져오고 있음. 그러나 이러한 방식은 RESTful API 구조를 따르지 않으며, 다음과 같은 문제를 야기할 수 있음.
-- ###### 비즈니스 로직의 프론트엔드 집중: 데이터 가공 및 필터링 로직이 프론트엔드에서 처리되어 유지보수가 어려워짐.
-- ###### 불필요한 데이터 과다 로딩: Firestore에서 객체 전체를 반환하므로, 프론트엔드에서 불필요한 데이터를 가져와 성능 저하 가능성이 있음.
-- ###### 보안 문제: Firestore를 직접 호출하면 클라이언트에서 데이터 접근 권한을 관리해야 하므로, 보안이 취약해질 수 있음.
+## 4단계: 댓글 기능 및 댓글 수 표시
 
-#### 해결 방법 (작업중)
+- ###### 댓글 작성, 삭제, 불러오기 기능 추가
+- ###### 각 게시글 아래에 댓글 수를 별도 API로 표시
 
-- 백엔드 서버를 구축하여 API를 통해 Firestore 데이터를 제공 → 프론트엔드와 서버 로직을 분리하고, 데이터 효율성을 개선 (Node.js + Express + Firebase Admin SDK)
-- ###### Firestore 데이터를 가공하여 프론트엔드에 필요한 데이터만 반환
-- ###### RESTful API 형태로 데이터를 제공하여 프론트엔드에서 axios를 통해 호출
-- ###### 클라이언트에서 Firestore 직접 접근을 차단하고, 인증 및 권한 관리를 백엔드에서 처리
+```ts
+app.get("/api/posts/:postId/comments/count", async (req, res) => {
+  const { postId } = req.params;
+  const snapshot = await db
+    .collection("posts")
+    .doc(postId)
+    .collection("comments")
+    .get();
+  res.json({ count: snapshot.size });
+});
+```
 
-이러한 방식으로 실무에서 일반적으로 사용되는 백엔드-프론트엔드 분리 구조를 도입하고,
-데이터 요청 최적화 및 보안 강화를 동시에 해결할 계획
+## 5단계: 배포 과정 - Vercel + Fly.io
 
-### 2. GitHub 로그인 시 auth/account-exists-with-different-credential 오류 문제
+### 프론트엔드 (Vercel)
 
-- 같은 이메일로 Google 로그인과 GitHub 로그인을 시도할 경우, Firebase에서 충돌 발생
-- auth/account-exists-with-different-credential 오류 메시지 출력됨
+- ###### NEXT_PUBLIC_API_BASE_URL 환경변수를 통해 백엔드 주소 분리
+- ###### .env 설정 시 실수 없이 배포 시점에도 반영되도록 주의
 
-#### 해결 방법 (작업중)
+### 백엔드 (Fly.io)
 
-- fetchSignInMethodsForEmail()을 사용하여 사용자가 기존에 등록한 로그인 방법 확인 후, 적절한 안내 메시지 제공
+- ###### 처음엔 Fly.io가 localhost에만 리스닝하여 접근 불가 (Error: is your app listening on 0.0.0.0?)
+- ###### server.js의 listen 부분을 아래처럼 수정하여 해결:
+
+```js
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`\uD83D\uDE80 서버 실행 중: http://localhost:${PORT}`);
+});
+```
+
+- CORS 설정을 통해 프론트 도메인 허용
+
+```js
+app.use(cors({ origin: "https://project-community-next-client.vercel.app" }));
+```
+
+### 트러블슈팅 로그 예시
+
+- ###### Fly.io 배포 후 ERR_CONNECTION_REFUSED → 서버 포트 확인
+- ###### No Access-Control-Allow-Origin → CORS 미설정
+- ###### 404 Not Found → API 라우터 누락 or 오타
+- ###### 댓글 수를 가져오는 /api/posts/:id/comments/count 누락 → 서버 라우트 추가로 해결
 
 ## 향후 추가할 기능
 
-- 게시판 기능 (CRUD)
-- 댓글 시스템
 - Firebase Firestore를 활용한 실시간 채팅
-- 등등
 
-현재까지는 로그인 시스템을 직접 구축하면서 로그인 후 상태 관리 및 Firebase 관련 에러를 해결하는 과정을 경험하고 있습니다. 앞으로 게시판, 댓글, 실시간 기능을 추가하며 완성도를 높여나갈 예정입니다.
+## 마무리하며 느낀 점
 
-전체 소스코드는 [Community-github-jeongeun](https://github.com/frontend-leejeongeun/Project-Community-Next) 여기서 볼 수 있습니다.
+작업과정 중 많은 이슈가 있었지만 가장 크게 느꼈던 점은 프론트엔드 중심의 개발 방식에서 벗어나 백엔드와 API 구조까지 고민하게 되었고, Fly.io와 같은 배포 플랫폼을 처음 다뤄보며 처음부터 끝까지 애플리케이션 하나를 온전히 만든다는 것이 얼마나 많은 고민과 애정이 필요한 것임을 체감했습니다.앞으로도 관련된 기능들을 추가하며 고도화를 통해 애플리케이션의 완성도를 높여나갈 예정입니다.
+
+프론트엔드코드는 [Community-front](https://github.com/frontend-leejeongeun/Project-Community-Next-Client) 여기서 보실 수 있으며 백엔드는 [Community-back](https://github.com/frontend-leejeongeun/Project-Community-Next-Server) 이곳에서 보실 수 있습니다.
