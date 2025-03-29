@@ -21,7 +21,7 @@ export default function Projects({ projectRef }) {
             <div className="project-info">
               <h3>
                 <Link to="/community" target="_blank">
-                  Community - NextJs
+                  Community - NextJs 
                 </Link>
               </h3>
               <div className="text-wrapper">
@@ -29,6 +29,12 @@ export default function Projects({ projectRef }) {
                   <span className="title">프로젝트 :</span>
                   <span className="des">
                     nextJs와 Firebase 로 만드는 커뮤니티
+                  </span>
+                </div>
+                <div className="text-block">
+                  <span className="title">URL :</span>
+                  <span className="des">
+                    https://project-community-next-client.vercel.app
                   </span>
                 </div>
                 <div className="text-block">
@@ -45,6 +51,11 @@ export default function Projects({ projectRef }) {
                     회원가입 & 로그인, 게시판, 댓글 시스템, 게시글 검색 기능
                   </span>
                 </div>
+              </div>
+              <div className="project-view-btn">
+                <Link to="https://project-community-next-client.vercel.app/" target="_blank">
+                  view project project
+                </Link>
               </div>
               <div className="project-view-btn">
                 <Link to="/community" target="_blank">
