@@ -54,7 +54,7 @@ export default function Projects({ projectRef }) {
               </div>
               <div className="project-view-btn">
                 <Link to="https://project-community-next-client.vercel.app/" target="_blank">
-                  view project project
+                  view project
                 </Link>
               </div>
               <div className="project-view-btn">
