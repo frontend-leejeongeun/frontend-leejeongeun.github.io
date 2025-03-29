@@ -33,7 +33,7 @@ export default function Projects({ projectRef }) {
                 </div>
                 <div className="text-block">
                   <span className="title">기술스택 :</span>
-                  <span className="des">nextJs, Firebase, html, tailwind css, typescript, javascript</span>
+                  <span className="des">nextJs, Firebase, typescript, javascript, tailwind css, vercel, fly.io</span>
                 </div>
                 <div className="text-block">
                   <span className="title">기여도 :</span>
@@ -42,7 +42,7 @@ export default function Projects({ projectRef }) {
                 <div className="text-block">
                   <span className="title">기능정의 :</span>
                   <span className="des">
-                    회원가입 & 로그인, 게시판, 댓글 시스템, 게시글 검색 기능 등
+                    회원가입 & 로그인, 게시판, 댓글 시스템, 게시글 검색 기능
                   </span>
                 </div>
               </div>
@@ -53,10 +53,18 @@ export default function Projects({ projectRef }) {
               </div>
               <div className="project-view-btn">
                 <Link
-                  to="https://github.com/frontend-leejeongeun/Project-Community-Next"
+                  to="https://github.com/frontend-leejeongeun/Project-Community-Next-Client"
                   target="_blank"
                 >
-                  go to repository
+                  go to repository - client
+                </Link>
+              </div>
+              <div className="project-view-btn">
+                <Link
+                  to="https://github.com/frontend-leejeongeun/Project-Community-Next-Server"
+                  target="_blank"
+                >
+                  go to repository - server
                 </Link>
               </div>
             </div>
