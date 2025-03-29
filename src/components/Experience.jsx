@@ -33,18 +33,6 @@ export default function Experience({ experienceRef }) {
                 </span>
               </p>
               <p>
-                <span className="left">주요 프로젝트</span>
-                <span className="right">
-                  메이플월드 공식웹페이지 프론트엔드개발 담당
-                </span>
-              </p>
-              <p>
-                <span className="left">.</span>
-                <span className="right">
-                  진삼국무쌍 이벤트 프론트엔드개발 담당
-                </span>
-              </p>
-              <p>
                 <span className="left">.</span>
                 <span className="right">
                   나이트워커 인게임 이벤트 프론트엔드개발 담당
