@@ -21,6 +21,7 @@ export default function Skills({ skillRef }) {
         <li>Jira</li>
         <li>Confluence</li>
         <li>Figma</li>
+        <li>Photoshop</li>
       </ul>
     </div>
   );

@@ -20,20 +20,19 @@ export default function Experience({ experienceRef }) {
           </div>
           <div className="vtimeline-block">
             <span className="vtimeline-date">
-              January 2022 – September 2024
+              2022 01 – 2024 09
             </span>
             <div className="vtimeline-content">
               <h3>NEXON</h3>
               <h4>Frontend Engineer</h4>
               <p>
-                <span className="left">소속</span>
+                <span className="left">역할</span>
                 <span className="right">
-                  넥슨코리아 인텔리전스랩스본부 플랫폼개발실 프론트웹개발팀에서
                   프론트엔드 엔지니어로 근무
                 </span>
               </p>
               <p>
-                <span className="left">.</span>
+                <span className="left">주요 프로젝트</span>
                 <span className="right">
                   나이트워커 인게임 이벤트 프론트엔드개발 담당
                 </span>
@@ -44,15 +43,15 @@ export default function Experience({ experienceRef }) {
                   빌딩앤파이터 인게임 이벤트 프론트엔드개발 담당
                 </span>
               </p>
-              <p>
+              {/* <p>
                 <span className="left">.</span>
                 <span className="right">
                   넥슨 UI 라이브러리 프론트엔드개발 담당
                 </span>
-              </p>
+              </p> */}
               <p>
                 <span className="left">.</span>
-                <span className="right">사내 웹오피스 프론트엔드개발 담당</span>
+                <span className="right">사내 웹오피스 UI개발 담당</span>
               </p>
             </div>
           </div>
@@ -74,15 +73,14 @@ export default function Experience({ experienceRef }) {
             </svg>
           </div>
           <div className="vtimeline-block">
-            <span className="vtimeline-date">October 2019 – November 2021</span>
+            <span className="vtimeline-date">2019 10 – 2021 09</span>
             <div className="vtimeline-content">
               <h3>Eland</h3>
               <h4>Frontend Engineer</h4>
               <p>
-                <span className="left">소속</span>
+                <span className="left">역할</span>
                 <span className="right">
-                  이랜드 개발본부 이노플 커머스플랫폼 개발실에서 프론트엔드
-                  엔지니어로 근무
+                  프론트엔드 엔지니어로 근무
                 </span>
               </p>
               <p>
@@ -93,7 +91,7 @@ export default function Experience({ experienceRef }) {
               </p>
               <p>
                 <span className="left">.</span>
-                <span className="right">이랜드몰 레거시 리뉴얼 담당</span>
+                <span className="right">이랜드몰 리뉴얼 담당</span>
               </p>
               <p>
                 <span className="left">.</span>
@@ -119,14 +117,14 @@ export default function Experience({ experienceRef }) {
             </svg>
           </div>
           <div className="vtimeline-block">
-            <span className="vtimeline-date">April 2015 – June 2019</span>
+            <span className="vtimeline-date">2015 04 – 2019 06</span>
             <div className="vtimeline-content">
               <h3>Korea Center(현 Connect Wave)</h3>
               <h4>UI Developer</h4>
               <p>
-                <span className="left">소속</span>
+                <span className="left">역할</span>
                 <span className="right">
-                  코리아센터 마케팅사업본부 전략지원팀에서 UI개발자로 근무
+                  UI개발자로 근무
                 </span>
               </p>
               <p>
@@ -166,15 +164,15 @@ export default function Experience({ experienceRef }) {
           </div>
           <div className="vtimeline-block">
             <span className="vtimeline-date">
-              September 2013 – December 2014
+              2013 09 – 2014 12
             </span>
             <div className="vtimeline-content">
               <h3>Licom Net</h3>
               <h4>UI Developer</h4>
               <p>
-                <span className="left">소속</span>
+                <span className="left">역할</span>
                 <span className="right">
-                  리컴넷 기술개발본부 개발팀에서 UI개발자로 근무
+                  UI개발자로 근무
                 </span>
               </p>
               <p>
@@ -215,14 +213,14 @@ export default function Experience({ experienceRef }) {
             </svg>
           </div>
           <div className="vtimeline-block">
-            <span className="vtimeline-date">October 2010 – March 2013</span>
+            <span className="vtimeline-date">2010 10 – 2013 03</span>
             <div className="vtimeline-content">
               <h3>PT Line</h3>
               <h4>UI Designer</h4>
               <p>
-                <span className="left">소속</span>
+                <span className="left">역할</span>
                 <span className="right">
-                  피티라인 디자인실에서 UI디자이너로 근무
+                  UI디자이너로 근무
                 </span>
               </p>
               <p>
