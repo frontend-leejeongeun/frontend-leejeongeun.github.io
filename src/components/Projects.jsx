@@ -2,17 +2,78 @@ import { Link } from "react-router-dom";
 import imgTodoVanilla from "../assets/images/project1.png";
 import imgTodoReact from "../assets/images/project2.png";
 import imgCommunity from "../assets/images/project3.png";
+import imgTv from "../assets/images/project4.png";
 
 export default function Projects({ projectRef }) {
   return (
     <div id="projects" className="background-alt" ref={projectRef}>
-      <h2 className="heading">Projects</h2>
+      <h2 className="heading">개인 프로젝트</h2>
+      <h3><strong>실무 프로젝트는 정보유출 이슈로 인해 개인프로젝트를 공유드립니다.</strong> </h3>
+      <br />
+      <br/>
       <div className="container">
         <div className="row">
-
-        <div className="project shadow-large">
+          <div className="project shadow-large">
+            <Link to="https://tv-six-rho.vercel.app/" target="_blank">
+              <div className="project-image tv">
+                <figure>
+                  <img src={imgTv} alt="project4" />
+                </figure>
+              </div>
+            </Link>
+            <div className="project-info">
+              <h3>
+                <Link to="https://tv-six-rho.vercel.app/" target="_blank">
+                  OTT
+                </Link>
+              </h3>
+              <div className="text-wrapper">
+                <div className="text-block">
+                  <span className="title">프로젝트 :</span>
+                  <span className="des">
+                    html, css, javascript 로 만드는 OTT 기본 서비스
+                  </span>
+                </div>
+                <div className="text-block">
+                  <span className="title">URL :</span>
+                  <span className="des">
+                    https://tv-six-rho.vercel.app/
+                  </span>
+                </div>
+                <div className="text-block">
+                  <span className="title">기술스택 :</span>
+                  <span className="des">html, css, javascript, 반응형, vercel</span>
+                </div>
+                <div className="text-block">
+                  <span className="title">기여도 :</span>
+                  <span className="des">100%</span>
+                </div>
+                <div className="text-block">
+                  <span className="title">기능정의 :</span>
+                  <span className="des">
+                    반응형페이지, API목록 불러오기, 검색, 북마크 기능
+                  </span>
+                </div>
+              </div>
+              <div className="project-view-btn">
+                <Link to="https://tv-six-rho.vercel.app/" target="_blank">
+                  view project
+                </Link>
+              </div>
+              <div className="project-view-btn">
+                <Link
+                  to="https://github.com/frontend-leejeongeun/tv"
+                  target="_blank"
+                >
+                  go to repository
+                </Link>
+              </div>
+            </div>
+          </div>
+          
+          <div className="project shadow-large">
             <Link to="/community" target="_blank">
-              <div className="project-image todovanilla">
+              <div className="project-image community">
                 <figure>
                   <img src={imgCommunity} alt="project3" />
                 </figure>

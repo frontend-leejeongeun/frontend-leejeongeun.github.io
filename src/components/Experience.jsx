@@ -28,7 +28,7 @@ export default function Experience({ experienceRef }) {
               <p>
                 <span className="left">역할</span>
                 <span className="right">
-                  프론트엔드 엔지니어로 근무
+                  퍼블리셔 및 프론트엔드 엔지니어로 근무
                 </span>
               </p>
               <p>
@@ -43,12 +43,6 @@ export default function Experience({ experienceRef }) {
                   빌딩앤파이터 인게임 이벤트 프론트엔드개발 담당
                 </span>
               </p>
-              {/* <p>
-                <span className="left">.</span>
-                <span className="right">
-                  넥슨 UI 라이브러리 프론트엔드개발 담당
-                </span>
-              </p> */}
               <p>
                 <span className="left">.</span>
                 <span className="right">사내 웹오피스 UI개발 담당</span>
@@ -80,7 +74,7 @@ export default function Experience({ experienceRef }) {
               <p>
                 <span className="left">역할</span>
                 <span className="right">
-                  프론트엔드 엔지니어로 근무
+                  퍼블리셔로 근무
                 </span>
               </p>
               <p>
@@ -124,7 +118,7 @@ export default function Experience({ experienceRef }) {
               <p>
                 <span className="left">역할</span>
                 <span className="right">
-                  UI개발자로 근무
+                  퍼블리셔로 근무
                 </span>
               </p>
               <p>
@@ -172,7 +166,7 @@ export default function Experience({ experienceRef }) {
               <p>
                 <span className="left">역할</span>
                 <span className="right">
-                  UI개발자로 근무
+                  퍼블리셔로 근무
                 </span>
               </p>
               <p>

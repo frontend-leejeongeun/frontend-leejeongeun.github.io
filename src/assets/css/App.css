@@ -575,12 +575,12 @@ footer {
   clear: both;
 }
 .project-info .text-wrapper .text-block .title {
-  width: 15%;
+  width: 20%;
   float: left;
   display: block;
 }
 .project-info .text-wrapper .text-block .des {
-  width: 85%;
+  width: 80%;
   float: left;
   display: block;
 }
